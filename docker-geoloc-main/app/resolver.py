@@ -123,7 +123,7 @@ import matplotlib.pyplot as plt
 import math
 #Postgres DB parameters
 postgres_host= 'db'
-postgres_password= 'PW556655'
+postgres_password= 'Admin1234'
 DB_NAME= 'Geolocation_DB'
 postgres_port= '5432'
 # MQTT parameters to publish the results
