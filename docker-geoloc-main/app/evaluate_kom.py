@@ -9,7 +9,7 @@ global dev_addr, qos, retain, device_name
 #Postgres DB parameters
 postgres_host= 'localhost'
 postgres_port= '5432'
-postgres_password= 'PW556655'
+postgres_password= 'Admin1234'
 DB_NAME= 'Geolocation_DB'
 
 # to query data from new error table
