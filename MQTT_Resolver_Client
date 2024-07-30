@@ -1,0 +1,177 @@
+#!/usr/bin/env python3
+'''
+Local MQTT Resolver
+1. Connect to PostGreSQL (to log position data)
+2. Connect to MQTT Broker
+3. Subscribe to TOA Packets
+4. Resolver (TOA, Lat, Long) returns Position in Lat & Long
+5. Store to PostGreSQL DB
+6. Publish back to MQTT Broker in different Topic < DeviceID/Position  >
+  
+'''
+import paho.mqtt.client as mqtt
+import datetime
+import time
+import psycopg2
+from psycopg2 import Error
+import numpy as np
+from scipy.optimize import least_squares
+
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+    client.subscribe("DeviceAddr/TOA",0)
+    
+def on_message(client, userdata, msg):
+    print("Received a message on topic: " + msg.topic)
+    Date = datetime.datetime.utcnow()
+    message=msg.payload.decode()
+    
+    TOA_sec = message.locpk.toa_sec
+    TOA_nsec = message.locpk.toa_nsec
+    TOA = TOA_sec +TOA_nsec
+    Lat= message.locpk.lat
+    Long= message.locpk.long
+    GWs= (Long +','+Long)
+    Position= Resolver(TOA, GWs)
+    #ax.annotate('Solved', (res.x[0], res.x[1]))
+    publish_To_Topic('DeviceAdr/Position', Position)
+   
+   ## Finally Store the Positions in PostgreSQL DB    
+   try:
+   postgres_insert_query = """ INSERT INTO TOA (DeviceID, Position) VALUES (%s,%s,%s)"""
+   record_to_insert = (5, 'One Plus 6', 950)
+   cursor.execute(postgres_insert_query, record_to_insert)
+
+   connection.commit()
+   count = cursor.rowcount
+   print (count, "Record inserted successfully into TOA table")
+
+   except (Exception, psycopg2.Error) as error :
+    if(connection):
+        print("Failed to insert record into TOA table", error)
+        
+        
+# Trilateration or Multilateration Algorithm (TBD)
+def Resolver(rec_times, GWs):
+
+# How many GWs. All GWs recieve the transmission.
+num_GWs = 4
+# plot the same hyperbola using the derived expressions.(just for testing)
+
+fig, ax = plt.subplots(figsize=(5,5))
+max_width = max(tx_square_side, rx_square_side)/2
+ax.set_ylim((max_width*-1, max_width))
+ax.set_xlim((max_width*-1, max_width))
+
+c = np.argmin(rec_times)  # GW that received first.
+p_c = GWs[c]
+t_c = rec_times[c]
+
+x = np.linspace(GWs[i][0] - 50000, GWs[i][0] + 50000, 100)
+y = np.linspace(GWs[i][1] - 50000, GWs[i][1] + 50000, 100)
+x, y = np.meshgrid(x, y)
+
+for i in range(num_GWs):
+    if i == c:
+        continue
+        
+    p_i = GWs[i]
+    t_i = rec_times[i]
+    
+    plt.contour(
+        x, y,
+        (
+           np.sqrt((x-p_c[0])**2 + (y-p_c[1])**2) 
+         - np.sqrt((x-p_i[0])**2 + (y-p_i[1])**2) 
+         + v*(t_i - t_c)
+        ),
+        [0])
+# Solve the location of the Sensor.
+
+c = np.argmin(rec_times)
+p_c = np.expand_dims(GWs[c], axis=0)
+t_c = rec_times[c]
+
+# Remove the c GW to allow for vectorization.
+all_p_i = np.delete(GWs, c, axis=0)
+all_t_i = np.delete(rec_times, c, axis=0)
+
+# Position Calculation of Sensor
+def eval_solution(x):
+    """ x is 2 element array of x, y of the Sensor"""
+    return (
+          np.linalg.norm(x - p_c, axis=1)
+        - np.linalg.norm(x - all_p_i, axis=1) 
+        + v*(all_t_i - t_c) 
+    )
+
+# Initial guess.
+x_init = [0, 0]
+
+# Find a value of x such that eval_solution is minimized.
+# Remember the receive times have error added to them: rec_time_noise_stdd.
+res = least_squares(eval_solution, x_init)
+return (res)
+
+def publish_To_Topic(topic, message):
+client.publish(topic,message)
+print ("Published: " + str(message) + " " + "on MQTT Topic: " + str(topic))
+print ("")
+
+## Set up a client for PostGreSQL
+try:
+    connection = psycopg2.connect(user = "sysadmin",
+                                  password = "pynative@#29",
+                                  host = "127.0.0.1",
+                                  port = "5432",
+                                  database = "postgres_db")
+
+    cursor = connection.cursor()
+    # Print PostgreSQL Connection properties
+    print ( connection.get_dsn_parameters(),"\n")
+
+    # Print PostgreSQL version
+    cursor.execute("SELECT version();")
+    record = cursor.fetchone()
+    print("You are connected to - ", record,"\n")
+    create_table_query = '''CREATE TABLE TOA
+          (DeviceAdr  TEXT  PRIMARY KEY      NOT NULL,
+          Time      Date
+         Position float8       NOT NULL
+                 
+           ); '''
+    
+    cursor.execute(create_table_query)
+    connection.commit()
+    
+except (Exception, psycopg2.Error) as error :
+    print ("Error while connecting to PostgreSQL", error)
+ 
+#Initialize the MQTT client that should connect to the Mosquitto broker
+client = mqtt.Client()
+
+#authentication via password and username
+client.username_pw_set("KOMRO","Komro1234")
+
+#set last will message
+client.will_set('PostGreSQL/lastwill','Last will message', 1, True)
+
+#create tls client object
+#client.tls_set('C:\\Users\\dhakshin\\AppData\\Local\\Programs\\Python\\Python37-32\\Lib\\site-packages\\paho\\mqtt\\ca.crt')
+#client.tls_insecure_set(True) 
+
+client.on_connect = on_connect
+client.on_message = on_message
+     
+connOK=False
+while(connOK == False):
+    try:
+        client.connect("192.168.0.4", 1883, 60)
+        connOK = True
+    except:
+        connOK = False
+    time.sleep(2)
+
+# Blocking loop to the Mosquitto broker
+client.loop_forever()
+
