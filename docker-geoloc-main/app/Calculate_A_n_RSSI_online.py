@@ -29,7 +29,7 @@ myProj = Proj("+proj=utm +zone=33 +north +ellps=WGS84")
 # Postgres DB parameters
 postgres_host= 'localhost'
 postgres_port= '5432'
-postgres_password= 'PW556655'
+postgres_password= 'Admin1234'
 DB_NAME= 'Geolocation_DB'
 # MQTT parameters to publish the results
 geoloc_host = '10.2.0.7'
