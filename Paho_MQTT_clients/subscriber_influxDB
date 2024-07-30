@@ -44,7 +44,7 @@ dbclient = InfluxDBClient('192.168.0.4', 8086, 'root', 'root', 'sensordata')
 client = mqtt.Client()
 
 #authentication via password and username
-client.username_pw_set("ALPMA","Alpma1234")
+client.username_pw_set("ADMIN","Admin1234")
 
 #set last will message
 client.will_set('InfluxDB/lastwill','Last will message', 1, True)
