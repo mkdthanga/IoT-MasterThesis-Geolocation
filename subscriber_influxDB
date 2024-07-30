@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+import paho.mqtt.client as mqtt
+import datetime
+import time
+from influxdb import InfluxDBClient
+
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+    client.subscribe("#",0)
+    
+def on_message(client, userdata, msg):
+    print("Received a message on topic: " + msg.topic)
+    Date = datetime.datetime.utcnow()
+    message=msg.payload.decode()
+    isfloatValue=False
+    try:
+        # Convert the string to a float so that it is stored as a number and not a string in the database
+        val = float(message)
+        isfloatValue=True
+    except:
+        print("Could not convert " + message + " to a float value")
+        isfloatValue=False
+
+    if isfloatValue:
+        print(str(Date) + ": " + msg.topic + " " + str(val))
+
+        json_body = [
+            {
+                "measurement": msg.topic,
+                "time": Date,
+                "fields": {
+                    "value": val
+                }
+            }
+        ]
+
+        dbclient.write_points(json_body)
+        print("Finished writing to InfluxDB")
+        
+# Set up a client for InfluxDB
+dbclient = InfluxDBClient('192.168.0.4', 8086, 'root', 'root', 'sensordata')
+
+# Initialize the MQTT client that should connect to the Mosquitto broker
+client = mqtt.Client()
+
+#authentication via password and username
+client.username_pw_set("ALPMA","Alpma1234")
+
+#set last will message
+client.will_set('InfluxDB/lastwill','Last will message', 1, True)
+
+#create tls client object
+client.tls_set('C:\\Users\\dhakshin\\AppData\\Local\\Programs\\Python\\Python37-32\\Lib\\site-packages\\paho\\mqtt\\ca.crt')
+client.tls_insecure_set(True) 
+
+client.on_connect = on_connect
+client.on_message = on_message
+
+connOK=False
+while(connOK == False):
+    try:
+        client.connect("192.168.0.4", 1883, 60)
+        connOK = True
+    except:
+        connOK = False
+    time.sleep(2)
+
+# Blocking loop to the Mosquitto broker
+client.loop_forever()
