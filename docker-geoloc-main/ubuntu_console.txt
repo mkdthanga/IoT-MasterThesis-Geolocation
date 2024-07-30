@@ -1,0 +1,235 @@
+grs_subscriber_1  |
+grs_subscriber_1  | psycopg2 connect error: (psycopg2.errors.UndefinedTable) relation "geoloc_packets" does not exist
+grs_subscriber_1  | LINE 2:             INSERT INTO geoloc_packets(time, device_address,...
+grs_subscriber_1  | (Background on this error at: http://sqlalche.me/e/13/f405)
+grs_subscriber_1  | 2021-06-07 15:50:11.427567: gateway/geoloc/647fdafffe005bb4 [ { "mote": "26012527", "frame_cnt": 64418, "freq_hz": 867700000, "bandwidth": 125000, "sf": 12, "antenna": 1, "toa_sec": 1307116227, "toa_nsec": 276498701, "rssi_dbm": -102, "snr_db": 7.0, "fo_hz": -9468, "toa_u_nsec": 130.5, "fo_u_hz": 0.84, "lat": 47.852404, "lon": 12.114206, "alt": 466, "gateway_id": "647FDAFFFE005BB4", "mic": "89e992c" } ]
+grs_subscriber_1  | Received a message on topic: gateway/geoloc/647fdafffe005b7b
+^CGracefully stopping... (press Ctrl+C again to force)
+^C^CERROR: Aborting.
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker exec -it geolocation_db_1 /bin/bash
+bash-5.1# python3 /app/create_db_table.py
+bash: python3: command not found
+bash-5.1# ls
+bin                         media                       srv
+dev                         mnt                         sys
+docker-entrypoint-initdb.d  opt                         tmp
+docker-entrypoint.sh        proc                        usr
+etc                         root                        var
+home                        run
+lib                         sbin
+bash-5.1# python3 create_db_table.py
+bash: python3: command not found
+bash-5.1# python create_db_table.py
+bash: python: command not found
+bash-5.1# exit
+exit
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker exec -it geolocation_db_1 /bin/sh
+/ # python3 /app/create_db_table.py
+/bin/sh: python3: not found
+/ # python3 geolocation_db_1:/app/create_db_table.py
+/bin/sh: python3: not found
+/ # python geolocation_db_1:/app/create_db_table.py
+/bin/sh: python: not found
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker exec -w . geolocation_db_1 python3 create_db_table.py
+OCI runtime exec failed: exec failed: Cwd must be an absolute path: unknown
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker exec -w / geolocation_db_1 python3 create_db_table.py
+OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: "python3": executable file not found in $PATH: unknown
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker exec -w ./ geolocation_db_1 python3 create_db_table.py
+OCI runtime exec failed: exec failed: Cwd must be an absolute path: unknown
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker exec -w pwd geolocation_db_1 python3 create_db_table.py
+OCI runtime exec failed: exec failed: Cwd must be an absolute path: unknown
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker exec -w geolocation_db_1 python3 create_db_table.py
+Error: No such container: python3
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker-compose down
+Stopping geolocation_grs_resolver_1   ... done
+Stopping geolocation_grs_subscriber_1 ... done
+Stopping geolocation_db_1             ... done
+Removing geolocation_grs_resolver_1   ... done
+Removing geolocation_grs_subscriber_1 ... done
+Removing geolocation_db_1             ... done
+Removing network geolocation_default
+########################################### 08.06.21 ##########################################
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ make compose
+Creating network "geolocation_default" with the default driver
+Creating geolocation_db_1 ...
+##################### rename container, if needed #####################
+thangaraj@docker-thangaraj ~ % docker rename grs-docker_db_1 geolocation_db_1
+thangaraj@docker-thangaraj ~ % docker rename grs-docker_grs_subscriber_1 geolocation_grs_subscriber_1
+thangaraj@docker-thangaraj ~ % docker rename grs-docker_grs_resolver_1 geolocation_grs_resolver_1
+########################## access container file system ########################
+1 thangaraj@docker-thangaraj ~ % docker exec -it geolocation_grs_subscriber_1 /bin/sh
+/app # ls -la
+total 204
+drwxrwxrwx    1 1000     1000          4096 Jun  8 15:11 .
+drwxr-xr-x    1 root     root          4096 Jun  8 15:11 ..
+-rwxrwxrwx    1 1000     1000           148 Jun  8 13:56 .dockerignore
+drwxrwxrwx    1 1000     1000          4096 Jun  8 15:11 .git
+-rwxrwxrwx    1 appuser  appuser       9298 May 27 13:22 Calculate_A_n_RSSI_online.py
+-rwxrwxrwx    1 appuser  appuser        772 Jun  8 13:04 Dockerfile
+drwxrwxrwx    3 1000     1000          4096 Jun  8 15:05 app
+-rwxrwxrwx    1 appuser  appuser       6427 May 31 15:06 create_db_table.py
+drwxrwxrwx    2 appuser  appuser       4096 May 20 13:39 datasets
+-rwxrwxrwx    1 appuser  appuser        878 Jun  8 13:36 docker-compose_template.yml
+-rwxrwxrwx    1 appuser  appuser      14948 Jun  4 10:08 evaluate_kom.py
+-rwxrwxrwx    1 appuser  appuser      23333 Jun  2 15:58 query_best_results.py
+-rwxrwxrwx    1 appuser  appuser      32051 Jun  8 13:33 remote_docker_host_console_210607.txt
+-rwxrwxrwx    1 appuser  appuser        222 May 18 20:14 requirements.txt
+-rwxrwxrwx    1 appuser  appuser      57235 May 31 15:07 resolver.py
+-rwxrwxrwx    1 appuser  appuser      10975 May 31 15:06 subscriber_db.py
+
+############################# TOP #############################
+Mem: 1142416K used, 892292K free, 19824K shrd, 23192K buff, 534240K cached
+CPU:   0% usr   0% sys   0% nic  98% idle   0% io   0% irq   0% sirq
+Load average: 0.02 0.06 0.09 1/274 32
+  PID  PPID USER     STAT   VSZ %VSZ CPU %CPU COMMAND
+    1     0 root     S     202m  10%   1   0% python3 subscriber_db.py
+   17     0 root     S     1644   0%   3   0% /bin/sh
+   32    17 root     R     1580   0%   3   0% top
+
+thangaraj@docker-thangaraj ~ % docker exec -it geolocation_grs_resolver_1 /bin/sh
+/app # ls
+Calculate_A_n_RSSI_online.py           error_maps                             requirements.txt
+Dockerfile                             evaluate_kom.py                        resolver.py
+create_db_table.py                     kf_maps                                subscriber_db.py
+datasets                               query_best_results.py
+docker-compose_template.yml            remote_docker_host_console_210607.txt
+/app # cd datasets
+/app/datasets # ls
+TrueLocations.csv              TrueLocations_bad_device.csv   TrueLocations_old.csv
+TrueLocations_1.csv            TrueLocations_good_device.csv
+
+############################# TOP #############################
+Mem: 1143236K used, 891472K free, 19912K shrd, 23288K buff, 534856K cached
+CPU:   0% usr   0% sys   0% nic  99% idle   0% io   0% irq   0% sirq
+Load average: 0.01 0.05 0.08 5/274 23
+  PID  PPID USER     STAT   VSZ %VSZ CPU %CPU COMMAND
+    1     0 root     S     244m  12%   2   0% python3 resolver.py
+   15     0 root     S     1644   0%   3   0% /bin/sh
+   23    15 root     R     1580   0%   1   0% top
+
+/app/datasets # cat TrueLocations.csv
+Nr.;Device Name;Device EUI;Device Address;Latitude;Longitude;Description
+1;SensoneoWastesensor020;70b3d5007000207f;1a8b9b9;47.839145;12.13215;komro
+2;SensoneoWastesensor022;70b3d50070002090;1dbd8;47.88023;12.125959;komro
+3;SensoneoWastesensor023;70b3d5007000209a;1c89233;47.853588;12.127346;Trafostation Brucklach
+4;SensoneoWastesensor024;70b3d500700020a1;1819695;47.862418;12.120265;Trafostation P&C
+5;SensoneoWastesensor025;70b3d50070002083;16ec316;47.848601;12.133986;Max-Josefs-Platz/Bergmeister
+6;SensoneoWastesensor026;70b3d5007000209c;1493999;47.848795;12.141093;uere Mnchner
+7;SensoneoWastesensor027;70b3d50070002086;1f11532;47.858348;12.12046;MBB
+8;SensoneoWastesensor028;70b3d500700020a7;1b3149;47.856239;12.13946;Grnfeldstr
+9;SensoneoWastesensor029;70b3d500700020ce;b77e53;47.860527;12.096997;Meraner Strae Frstatt
+10;SensoneoWastesensor030;70b3d50070002093;4150a2;47.858901;12.122631;Schlossberg/stephanskirchen
+11;SensoneoWastesensor031;70b3d5007000209b;30b5f8;47.826407;12.096926;Mangfall/Miesbacher
+12;SensoneoWastesensor032;70b3d50070002080;db9550;47.863362;12.102987;
+13;SensoneoWastesensor033;70b3d50070002088;f62b1c;47.841315;12.086617;
+14;SensoneoWastesensor034;70b3d50070002092;1274406;47.844323;12.104608;
+15;SensoneoWastesensor035;70b3d5007000203e;f02537;47.824496;12.096649;
+16;SensoneoWastesensor036;70b3d5007000207a;d7ea21;47.840092;12.10907;
+17;SensoneoWastesensor037;70b3d500700020bc;180a928;47.829013;12.115934;
+18;SensoneoWastesensor038;70b3d50070002097;824aab;47.829013;12.114934;
+.
+.
+.
+62;SensoneoWastesensor012;70b3d5007000203c;1d289b5;47.869647434984300;12.106973371015900;
+/app/datasets # exit
+thangaraj@docker-thangaraj ~ % exit
+
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ ./copy2container.sh
+^Cthangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ ls
+Makefile  README.md  app  copy2container.sh  docker-compose.yml  ubuntu_console.txt
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ chmod +x copy2container.sh
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ ls
+Makefile  README.md  app  copy2container.sh  docker-compose.yml  ubuntu_console.txt
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ ./copy2container.sh
+^Cthangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$
+
+thangaraj@docker-thangaraj ~ % docker ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED             STATUS             PORTS                    NAMES
+d57b83f374df   komrogrs:latest      "sh -c 'python3 crea…"   About an hour ago   Up About an hour                            geolocation_grs_subscriber_1
+48094d1c18dc   komrogrs:latest      "sh -c 'python3 reso…"   About an hour ago   Up About an hour                            geolocation_grs_resolver_1
+e867d4268b21   postgres:11-alpine   "docker-entrypoint.s…"   About an hour ago   Up About an hour   0.0.0.0:5432->5432/tcp   geolocation_db_1
+
+###################################### 09.06.21 (nachdem eine neue Ordner in /geolocation/app/* Erstellen und die alte Git Repo Folder löschen) ##############################################
+Agent pid 145
+Enter passphrase for /home/thangaraj/.ssh/id_rsa:
+Identity added: /home/thangaraj/.ssh/id_rsa (rsa-key-20191127)
+thangaraj@KOM1260:~$ docker ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED        STATUS        PORTS                    NAMESd57b83f374df   komrogrs:latest      "sh -c 'python3 crea…"   17 hours ago   Up 17 hours                            geolocation_grs_subscriber_1
+48094d1c18dc   komrogrs:latest      "sh -c 'python3 reso…"   17 hours ago   Up 17 hours                            geolocation_grs_resolver_1
+e867d4268b21   postgres:11-alpine   "docker-entrypoint.s…"   17 hours ago   Up 17 hours   0.0.0.0:5432->5432/tcp   geolocation_db_1
+thangaraj@KOM1260:~$ docker exec -ti geolocation_grs_resolver_1 /bin/bash
+bash-5.0# ls -l
+total 184
+-rwxrwxrwx    1 appuser  appuser       9298 May 27 13:22 Calculate_A_n_RSSI_online.py
+-rwxrwxrwx    1 appuser  appuser        772 Jun  8 13:04 Dockerfile
+-rwxrwxrwx    1 appuser  appuser       6427 May 31 15:06 create_db_table.py
+drwxrwxrwx    2 appuser  appuser       4096 May 20 13:39 datasets
+-rwxrwxrwx    1 appuser  appuser        878 Jun  8 13:36 docker-compose_template.yml
+drwxr-sr-x    2 root     appuser       4096 Jun  8 14:44 error_maps
+-rwxrwxrwx    1 appuser  appuser      14948 Jun  4 10:08 evaluate_kom.py
+drwxr-sr-x    2 root     appuser       4096 Jun  8 14:44 kf_maps
+-rwxrwxrwx    1 appuser  appuser      23333 Jun  2 15:58 query_best_results.py
+-rwxrwxrwx    1 appuser  appuser      32051 Jun  8 13:33 remote_docker_host_console_210607.txt
+-rwxrwxrwx    1 appuser  appuser        222 May 18 20:14 requirements.txt
+-rwxrwxrwx    1 appuser  appuser      57235 May 31 15:07 resolver.py
+-rwxrwxrwx    1 appuser  appuser      10975 May 31 15:06 subscriber_db.py
+bash-5.0# cd /
+bash-5.0# ls
+?      app    bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+bash-5.0# cd app
+bash-5.0# ls
+Calculate_A_n_RSSI_online.py           datasets                               evaluate_kom.py                        remote_docker_host_console_210607.txt  subscriber_db.py
+Dockerfile                             docker-compose_template.yml            kf_maps                                requirements.txt
+create_db_table.py                     error_maps                             query_best_results.py                  resolver.py
+bash-5.0# ls -l
+total 720
+-rwxrwxrwx    1 1000     1000          9298 May 27 13:22 Calculate_A_n_RSSI_online.py
+-rwxrwxrwx    1 1000     1000          1519 May  4 12:54 Docker README.txt
+-rwxrwxrwx    1 1000     1000           772 Jun  8 13:04 Dockerfile
+-rwxrwxrwx    1 1000     1000        430285 May  4 12:54 KOMRO_GRS_in_Docker.pptx
+drwxrwxrwx    2 1000     1000          4096 Jun  9 07:34 __pycache__
+-rwxrwxrwx    1 1000     1000          6427 May 31 15:06 create_db_table.py
+drwxrwxrwx    1 1000     1000          4096 Jun  9 07:34 datasets
+-rwxrwxrwx    1 appuser  appuser        878 Jun  8 13:36 docker-compose_template.yml
+-rwxrwxrwx    1 1000     1000         91810 May 31 08:40 docker_console_logs_210526.txt
+drwxr-sr-x    2 root     appuser       4096 Jun  8 14:44 error_maps
+-rwxrwxrwx    1 1000     1000         14948 Jun  4 10:08 evaluate_kom.py
+drwxr-sr-x    2 root     appuser       4096 Jun  8 14:44 kf_maps
+-rwxrwxrwx    1 1000     1000         23333 Jun  2 15:58 query_best_results.py
+-rwxrwxrwx    1 1000     1000          5246 May 20 13:30 readme.txt
+-rwxrwxrwx    1 1000     1000         32051 Jun  8 13:33 remote_docker_host_console_210607.txt
+-rwxrwxrwx    1 1000     1000           222 May 18 20:14 requirements.txt
+-rwxrwxrwx    1 1000     1000         58367 Jun  8 14:44 resolver.py
+-rwxrwxrwx    1 1000     1000         10975 May 31 15:06 subscriber_db.py
+#########################
+gent pid 191
+Enter passphrase for /home/thangaraj/.ssh/id_rsa:
+Identity added: /home/thangaraj/.ssh/id_rsa (rsa-key-20191127)
+thangaraj@KOM1260:~$ cd winhome
+-bash: cd: winhome: No such file or directory
+thangaraj@KOM1260:~$ ls
+thangaraj@KOM1260:~$ cd/ mnt/c/
+-bash: cd/: No such file or directory
+thangaraj@KOM1260:~$ cd /mnt/c/Users/thangaraj/geolocation
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ ls
+Makefile  README.md  app  copy2container.sh  docker-compose.yml  ubuntu_console.txt
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ cat copy2container.sh
+docker cp app geolocation_grs_subscriber_1:/
+docker cp app geolocation_grs_resolver_1:/
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker cp app geolocation_grs_subscriber_1:/
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker cp app geolocation_grs_resolver_1:/
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ ./copy2container.sh
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ cat Makefile
+build:
+        cd app && docker build -t komrogrs .
+
+compose: build
+        docker-compose up
+
+stop:
+        docker-compose down
+
+update:
+        /bin/bash copy2container.shthangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ make update
+/bin/bash copy2container.sh
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$

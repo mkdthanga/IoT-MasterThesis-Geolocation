@@ -1,0 +1,2102 @@
+####################################### Dockerfile ##############################################
+FROM python:3.8.1-alpine3.11
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+ENV PROJ_DIR=/usr
+
+RUN addgroup -S appuser ; adduser -S appuser -G appuser -h /app ;\
+    chown appuser:appuser /app
+
+WORKDIR /app
+COPY --chown=appuser:appuser / /app
+
+RUN apk update \
+    && apk add --upgrade --no-cache \
+	    python3 libpq uwsgi-python3 \
+		python3-dev py3-pip alpine-sdk postgresql-dev postgresql \
+		proj proj-dev \
+		proj-util \
+        bash openssh curl ca-certificates openssl less htop \
+		g++ make wget rsync \
+        build-base libpng-dev freetype-dev libexecinfo-dev openblas-dev libgomp lapack-dev \
+		libgcc libquadmath musl  \
+		libgfortran \
+		lapack-dev \
+	&&  pip install --no-cache-dir --upgrade pip \
+    &&  pip install --no-cache-dir -r requirements.txt
+
+
+CMD ["top"]
+
+>docker exec -it <cotainer_name> /bin/sh
+
+########################################## Power Shell ##############################################
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Lernen Sie das neue plattformübergreifende PowerShell kennen – https://aka.ms/pscore6
+
+PS C:\Users\thangaraj> cd C:\Users\thangaraj\geolocation_old\grs-docker
+PS C:\Users\thangaraj\geolocation_old\grs-docker> ls
+
+
+    Verzeichnis: C:\Users\thangaraj\geolocation_old\grs-docker
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        18.05.2021     19:09                .idea
+d-----        18.05.2021     18:49                datasets
+d-----        10.05.2021     11:59                error_maps
+d-----        10.05.2021     11:59                kf_maps
+d-----        10.05.2021     11:59                __pycache__
+-a----        10.05.2021     11:55          23673 console_logs.txt
+-a----        04.05.2021     14:54          12427 device_address.xlsx
+-a----        04.05.2021     14:54           1519 Docker README.txt
+-a----        18.05.2021     16:46            510 docker-compose.yml
+-a----        26.05.2021     09:33            783 Dockerfile
+-a----        04.05.2021     14:54         242508 docker_compose_up_log_201013.txt
+-a----        04.05.2021     14:54         226843 grs-docker_built_up_success_log.txt
+-a----        04.05.2021     14:54          35813 http_request_semtech.py
+-a----        04.05.2021     14:54          24114 http_request_tektelic.py
+-a----        04.05.2021     14:54         430285 KOMRO_GRS_in_Docker.pptx
+-a----        18.05.2021     13:24         243526 postgresql_not_running_on_5433.txt
+-a----        04.05.2021     14:54           4981 readme.txt
+-a----        18.05.2021     22:14            222 requirements.txt
+-a----        19.05.2021     14:22          59487 resolver.py
+-a----        04.05.2021     14:54          53924 resolver_ecef.py
+-a----        19.05.2021     14:09             79 run.sh
+-a----        18.05.2021     18:51          17321 subscriber_db.py
+-a----        04.05.2021     14:54           1574 TrueLocations.csv
+
+
+PS C:\Users\thangaraj\geolocation_old\grs-docker> docker system prune
+WARNING! This will remove:
+  - all stopped containers
+  - all networks not used by at least one container
+  - all dangling images
+  - all dangling build cache
+
+Are you sure you want to continue? [y/N] y
+Deleted build cache objects:
+ruz47h1tldq33oj243q280ymx
+zvc4roy43z802vafhdeg4am79
+jrssyy3y0mcaltijndqkih6vj
+sim5kfp6m616zvpbl9szg2tdp
+2csde14892ggpp2gfyjjtu8wv
+7mbnkn2qui8l6ewuml6cwvcb2
+nbsb7iskv912r3d63sv1p1u2y
+sdj9h1aonlpd1h9lub2fc8l2i
+pt23icrt3jil8ozpzbu7ndbps
+o2ksmeezwta1dqorkebselka4
+y5tx2gncwqs60a7oir7lbe18g
+xeyrfvhvofcqg0ygm0ntkps1x
+
+Total reclaimed space: 1.146GB
+
+PS C:\Users\thangaraj\geolocation_old\grs-docker> docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+PS C:\Users\thangaraj\geolocation_old\grs-docker> docker image ls
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+PS C:\Users\thangaraj\geolocation_old\grs-docker> docker build -t komrogrs .
+[+] Building 0.1s (2/2) FINISHED
+ => [internal] load build definition from Dockerfile                                                               0.0s
+ => => transferring dockerfile: 822B                                             0.0s
+PS C:\Users\thangaraj\geolocation_old\grs-docker> docker-compose up
+Mem: 3737764K used, 2652972K free, 545136K shrd, 237172K buff, 2551996K cached
+grs_1  | CPU:   0% usr   0% sys   0% nic  99% idle   0% io   0% irq   0% sirq
+grs_1  | Load average: 0.13 0.06 0.02 1/565 47
+grs_1  |   PID  PPID USER     STAT   VSZ %VSZ CPU %CPU COMMAND
+grs_1  |    16     8 root     S     331m   5%   6   0% python3 /app/subscriber_db.py                # only seen after 'docker cp' & 'docker exec' commands
+grs_1  |    25     0 root     S     372m   6%   2   0% python3 /app/resolver.py                     # only seen after 'docker cp' & 'docker exec' commands
+grs_1  |     8     0 root     S     1644   0%   0   0% /bin/sh                                      # seen right after docker-compose up!!
+
+################################### Docker cp from host to container (modified codes to cotainer) ################################
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Lernen Sie das neue plattformübergreifende PowerShell kennen – https://aka.ms/pscore6
+
+PS C:\Users\thangaraj> docker cp C:\Users\thangaraj\geolocation_old\grs-docker\resolver_210526.py grs-docker_grs_1:/app/
+PS C:\Users\thangaraj> docker cp C:\Users\thangaraj\geolocation_old\grs-docker\subscriber_db_210526.py grs-docker_grs_1:/app/
+
+########################## docker exec -it console (new files: resolver_210526.py & subscriber_db_210526.py copied successfully) ################################
+/app # ls
+Docker README.txt                    docker_compose_up_log_201013.txt     resolver.py
+Dockerfile                           error_maps                           resolver_210526.py
+KOMRO_GRS_in_Docker.pptx             grs-docker_built_up_success_log.txt  resolver_ecef.py
+TrueLocations.csv                    http_request_semtech.py              run.sh
+__pycache__                          http_request_tektelic.py             run_1.sh
+console_logs.txt                     kf_maps                              subscriber_db.py
+datasets                             postgresql_not_running_on_5433.txt   subscriber_db_210526.py
+device_address.xlsx                  readme.txt
+docker-compose.yml                   requirements.txt
+##############################################################################
+/app # exec python3 /app/subscriber_db_210526.py
+
+/app # exec python3 /app/resolver_210526.py
+
+########################################################################## docker exec -it <container_id>:/path/to/pythonscript.py #######################################################################
+/app # vi resolver_210526.py
+/app # cat resolver_210526.py
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun  25 09:13:39 2020
+
+@author: mkdth
+
+import os
+import numpy as np
+import paho.mqtt.client as mqtt
+import pandas as pd
+import statistics
+import json
+import psycopg2
+from scipy.optimize import least_squares
+from scipy.optimize import minimize
+from pyproj import Proj
+from numpy import linalg
+from datetime import datetime, timedelta
+from time import sleep
+from pykalman import KalmanFilter
+import matplotlib.pyplot as plt
+import math
+#Postgres DB parameters
+postgres_host= 'db'
+postgres_password= 'PW556655'
+DB_NAME= 'Geolocation_DB'
+postgres_port= '5432'
+# MQTT parameters to publish the results
+geoloc_host = '10.2.0.7'
+mqtt_port= 1884
+qos = 0
+retain = False
+# UTM coordinates
+myProj = Proj("+proj=utm +zone=33 +north +ellps=WGS84")
+# Control Flags to use calculated TOA instead of real-time TOA data (to plot hyperbola under ideal scenario)
+bCalculatedTOA = True       # calculate TOA given the ground truth locations of sp. devices
+bCalculatedRSSI = True      # calculate RSSI given the ground truth locations of sp. devices
+bPrint_debug = False         # enable print statements for debugging
+bSelected_devices = True     # if only selected devices should be resolved
+bDynamic_A_n = False          # to calculate A & n value for each device at every resolving instances (A&n)
+bQuery_frame_cnt = False      # query geoloc packets based on frame counts
+bCallPrevKFResults = False   # query previous KF results and append as KF measurements
+bAssemble_tdoa_result = False    #assembly only tdoa results and append as KF measurements
+# declare globals
+global v, delta_d, max_d, df_0, tx_0, tx_temp, device_name, tx_utm, tx_gps
+global tdoa_results, rssi_results, fusion_results, frame_counts, f, filepath
+global loci, all_t_i, t_c, df_trueloc, kf
+# Speed of transmission propogation
+v = 3e8
+#mqtt connect function to establish a connection with mqtt broker!
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code " + str(rc))
+client = mqtt.Client()
+client.on_connect = on_connect
+client.connect(geoloc_host,mqtt_port, 60)
+client.loop_start()
+# required folder paths
+error_map_path = 'error_maps/'                              # destination folder to store the error_maps
+true_location_file_path = 'datasets/TrueLocations.csv'  # destination of truelocation.csv
+kf_map_path = 'kf_maps/'                                    # destination folder to store the kf_maps
+# check if the error map directories exists, if not create them
+cwd = os.getcwd()
+if not os.path.exists(error_map_path):
+    os.mkdir(error_map_path)
+if not os.path.exists(kf_map_path):
+    os.mkdir(kf_map_path)
+# read the true location.CSV file
+df_trueloc = pd.read_csv(true_location_file_path, sep=';', encoding='latin-1', header= 'infer', engine='python')
+.
+.
+.
+.
+................
+
+/app # exec python3 /app/resolver_210526.py
+Connected with result code 0
+Timer starts....3600 seconds!
+device address: 1a8b9b9
+gets real true location
+device_name: SENSONEOWASTESENSOR020
+extracts only last but best UL frame
+frame_cnt_used: 7221
+length of dataframe before geoloc filter: 133
+length of dataframe after geoloc filter: 10
+temp_rssi_var_per_gw: [0. 0. 0.]
+max. toa uncertainty in nsec: 490.6
+min. toa uncertainty in nsec: 178.4
+mean toa uncertainty in nsec: 301.76
+mean of snr in dBm: -4.340000000000001
+variance of rssi in dBm: 0.0
+frame_cnt_resolved: 7221
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 7221    10
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0007247297466557643
+result: (array([12.1251564 , 47.85203073]), array([12.12244629, 47.85505286]), (12.122446290104577, 47.85505286113997), array([-469.93579022, 1451.43339161]), array([-660.13370121, 1794.83101422]), array([-660.13370121, 1794.83101422]), 0.0007247297466557643)
+Position Resolved for device 1a8b9b9 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.839145  12.13215  475.      ]
+measurements to kf function: [[47.85203073 12.1251564 ]
+ [47.85505286 12.12244629]
+ [47.85505286 12.12244629]]
+Mean R in meters: 50.29333333333333
+main_tdoa_error: 1525.6141508319665
+main_rssi_error: 1912.379374778151
+main_fused_error: 1912.379374778171
+main_kf_error: 1539.4823711634242
+main_kf_smoothed_error: 1539.4897617177626
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1a8b9b9 successfully for SENSONEOWASTESENSOR020
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1dbd8
+gets real true location
+device_name: SENSONEOWASTESENSOR022
+extracts only last but best UL frame
+frame_cnt_used: 7133
+length of dataframe before geoloc filter: 56
+length of dataframe after geoloc filter: 9
+temp_rssi_var_per_gw: [0.33333333 0.91666667 2.        ]
+max. toa uncertainty in nsec: 488.7
+min. toa uncertainty in nsec: 118.4
+mean toa uncertainty in nsec: 312.3
+mean of snr in dBm: -4.2333333333333325
+variance of rssi in dBm: 1.0833333333333333
+frame_cnt_resolved: 7133
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 7133    9
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0003800011840915259
+result: (array([12.155545, 47.872323]), array([12.13573208, 47.87854858]), (12.135721934318214, 47.87855176703028), array([2179.42944349, -960.64300144]), array([ 723.68774709, -214.01635638]), array([ 722.94255711, -213.63416035]), 0.0003800011840915259)
+Position Resolved for device 1dbd8 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.88023   12.125959 475.      ]
+measurements to kf function: [[47.872323   12.155545  ]
+ [47.87854858 12.13573208]
+ [47.87855177 12.13572193]]
+Mean R in meters: 52.32083333333334
+main_tdoa_error: 2381.753067667556
+main_rssi_error: 754.6700975143553
+main_fused_error: 753.8471299576571
+main_kf_error: 2376.012232615318
+main_kf_smoothed_error: 2376.0109360369656
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1dbd8 successfully for SENSONEOWASTESENSOR022
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1c89233
+gets real true location
+device_name: SENSONEOWASTESENSOR023
+extracts only last but best UL frame
+frame_cnt_used: 7223
+length of dataframe before geoloc filter: 293
+length of dataframe after geoloc filter: 24
+temp_rssi_var_per_gw: [5.33333333 7.14285714 0.28571429 0.        ]
+max. toa uncertainty in nsec: 369.6
+min. toa uncertainty in nsec: 16.9
+mean toa uncertainty in nsec: 193.70000000000002
+mean of snr in dBm: 0.36666666666666653
+variance of rssi in dBm: 3.1904761904761907
+frame_cnt_resolved: 7223
+no. of unique frame counts: 1
+no. of unique gateway IDs: 4
+no_of_occurences: 7223    24
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.00098055061886178
+result: (array([12.12757654, 47.85269953]), array([12.126577  , 47.85424862]), (12.126574569168149, 47.85425238966679), array([ 13.57097975, -99.3766486 ]), array([-54.78657806,  75.55411301]), array([-54.95304925,  75.98012197]), 0.00098055061886178)
+Position Resolved for device 1c89233 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.853588  12.127346 475.      ]
+measurements to kf function: [[47.85269953 12.12757654]
+ [47.85424862 12.126577  ]
+ [47.85425239 12.12657457]]
+Mean R in meters: 33.08095238095239
+main_tdoa_error: 100.29900188351081
+main_rssi_error: 93.32734395116957
+main_fused_error: 93.77001950015878
+main_kf_error: 100.27436769105731
+main_kf_smoothed_error: 100.27181694596426
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1c89233 successfully for SENSONEOWASTESENSOR023
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1819695
+gets real true location
+device_name: SENSONEOWASTESENSOR024
+extracts only last but best UL frame
+frame_cnt_used: 7219
+length of dataframe before geoloc filter: 130
+length of dataframe after geoloc filter: 12
+temp_rssi_var_per_gw: [2.         1.46666667 0.33333333]
+max. toa uncertainty in nsec: 317.7
+min. toa uncertainty in nsec: 71.9
+mean toa uncertainty in nsec: 204.25
+mean of snr in dBm: -0.9666666666666668
+variance of rssi in dBm: 1.2666666666666668
+frame_cnt_resolved: 7219
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 7219    12
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0010240920802602538
+result: (array([12.131761, 47.860238]), array([12.12498486, 47.85570207]), (12.124978660845791, 47.85569791959207), array([ 850.71984896, -274.2669842 ]), array([ 325.17915963, -759.4917281 ]), array([ 324.69801643, -759.93596124]), 0.0010240920802602538)
+Position Resolved for device 1819695 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.862418  12.120265 475.      ]
+measurements to kf function: [[47.860238   12.131761  ]
+ [47.85570207 12.12498486]
+ [47.85569792 12.12497866]]
+Mean R in meters: 34.358333333333334
+main_tdoa_error: 893.8381509196929
+main_rssi_error: 826.1774451751949
+main_fused_error: 826.3966765730961
+main_kf_error: 893.7658118741082
+main_kf_smoothed_error: 893.7668980734186
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1819695 successfully for SENSONEOWASTESENSOR024
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 16ec316
+gets real true location
+device_name: SENSONEOWASTESENSOR025
+extracts only last but best UL frame
+frame_cnt_used: 7133
+length of dataframe before geoloc filter: 57
+length of dataframe after geoloc filter: 4
+temp_rssi_var_per_gw: [8.]
+max. toa uncertainty in nsec: 412.2
+min. toa uncertainty in nsec: 151.3
+mean toa uncertainty in nsec: 279.425
+mean of snr in dBm: -1.375
+variance of rssi in dBm: 8.0
+frame_cnt_resolved: 7133
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 7133    4
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0032890459520019317
+result: (array([12.127259, 47.852614]), array([12.12626605, 47.85174884]), (12.12626183447635, 47.85174516751157), array([-486.61660391,  464.66017481]), array([-564.46638735,  371.27902538]), array([-564.79652134,  370.88302824]), 0.0032890459520019317)
+Position Resolved for device 16ec316 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.848601  12.133986 475.      ]
+measurements to kf function: [[47.852614   12.127259  ]
+ [47.85174884 12.12626605]
+ [47.85174517 12.12626183]]
+Mean R in meters: 48.57083333333333
+main_tdoa_error: 672.8334097302009
+main_rssi_error: 675.6259446845634
+main_fused_error: 675.6843428346037
+main_kf_error: 672.7988444085423
+main_kf_smoothed_error: 672.7942835851927
+Komro Resolved Positions published to topics: geolocation/calculation/komro/16ec316 successfully for SENSONEOWASTESENSOR025
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1493999
+gets real true location
+device_name: SENSONEOWASTESENSOR026
+extracts only last but best UL frame
+frame_cnt_used: 7222
+length of dataframe before geoloc filter: 130
+length of dataframe after geoloc filter: 9
+temp_rssi_var_per_gw: [0.33333333 4.91666667]
+max. toa uncertainty in nsec: 438.9
+min. toa uncertainty in nsec: 132.5
+mean toa uncertainty in nsec: 276.3111111111111
+mean of snr in dBm: -3.8444444444444446
+variance of rssi in dBm: 2.625
+frame_cnt_resolved: 7222
+no. of unique frame counts: 1
+no. of unique gateway IDs: 4
+no_of_occurences: 7222    9
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0009171108989000382
+result: (array([12.132146, 47.855407]), array([12.13501245, 47.85873469]), (12.135016476229689, 47.85873936350768), array([-641.98034765,  759.60412268]), array([-413.86303893, 1121.44916274]), array([-413.54295162, 1121.95689276]), 0.0009171108989000382)
+Position Resolved for device 1493999 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.848795  12.141093 475.      ]
+measurements to kf function: [[47.855407   12.132146  ]
+ [47.85873469 12.13501245]
+ [47.85873936 12.13501648]]
+Mean R in meters: 46.70810185185184
+main_tdoa_error: 994.5537642405831
+main_rssi_error: 1195.3789522967625
+main_fused_error: 1195.7445555182705
+main_kf_error: 994.5870957908767
+main_kf_smoothed_error: 994.5879820620959
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1493999 successfully for SENSONEOWASTESENSOR026
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1f11532
+gets real true location
+device_name: SENSONEOWASTESENSOR027
+extracts only last but best UL frame
+frame_cnt_used: 7222
+length of dataframe before geoloc filter: 227
+length of dataframe after geoloc filter: 9
+temp_rssi_var_per_gw: [0.33333333 8.33333333]
+max. toa uncertainty in nsec: 198.3
+min. toa uncertainty in nsec: 29.0
+mean toa uncertainty in nsec: 126.94444444444444
+mean of snr in dBm: 2.8333333333333335
+variance of rssi in dBm: 4.333333333333334
+frame_cnt_resolved: 7222
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 7222    9
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.001919309791738003
+result: (array([12.11583635, 47.86192352]), array([12.12500478, 47.85670116]), (12.125051172930178, 47.856674735625205), array([-330.95925305,  410.25252859]), array([ 333.09013583, -195.67900198]), array([ 336.45038263, -198.74515869]), 0.001919309791738003)
+Position Resolved for device 1f11532 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.858348  12.12046  475.      ]
+measurements to kf function: [[47.86192352 12.11583635]
+ [47.85670116 12.12500478]
+ [47.85667474 12.12505117]]
+Mean R in meters: 22.24074074074074
+main_tdoa_error: 527.1064070892629
+main_rssi_error: 386.3150403505678
+main_fused_error: 390.7665518904133
+main_kf_error: 527.1167551605046
+main_kf_smoothed_error: 527.1166282738421
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1f11532 successfully for SENSONEOWASTESENSOR027
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1b3149
+gets real true location
+device_name: SENSONEOWASTESENSOR028
+extracts only last but best UL frame
+frame_cnt_used: 7222
+length of dataframe before geoloc filter: 249
+length of dataframe after geoloc filter: 12
+temp_rssi_var_per_gw: [ 0.          0.         28.57142857]
+max. toa uncertainty in nsec: 194.9
+min. toa uncertainty in nsec: 49.9
+mean toa uncertainty in nsec: 111.83333333333336
+mean of snr in dBm: 3.8166666666666664
+variance of rssi in dBm: 9.523809523809524
+frame_cnt_resolved: 7222
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 7222    12
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0022011445080335674
+result: (array([12.132171, 47.855397]), array([12.13227611, 47.85677549]), (12.132277448395302, 47.856793022288535), array([-548.64372218,  -73.34708671]), array([-535.09214896,   79.55123781]), array([-534.91976812,   81.49615898]), 0.0022011445080335674)
+Position Resolved for device 1b3149 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.856239  12.13946  475.      ]
+measurements to kf function: [[47.855397   12.132171  ]
+ [47.85677549 12.13227611]
+ [47.85679302 12.13227745]]
+Mean R in meters: 21.019841269841272
+main_tdoa_error: 553.5248224067318
+main_rssi_error: 540.973203881508
+main_fused_error: 541.0922123408635
+main_kf_error: 553.4833186731729
+main_kf_smoothed_error: 553.4833509326558
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1b3149 successfully for SENSONEOWASTESENSOR028
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: b77e53
+gets real true location
+device_name: SENSONEOWASTESENSOR029
+extracts only last but best UL frame
+frame_cnt_used: 7222
+length of dataframe before geoloc filter: 217
+length of dataframe after geoloc filter: 18
+temp_rssi_var_per_gw: [0.         4.57142857 4.57142857]
+max. toa uncertainty in nsec: 210.5
+min. toa uncertainty in nsec: 0.0
+mean toa uncertainty in nsec: 147.4
+mean of snr in dBm: -2.3555555555555556
+variance of rssi in dBm: 3.0476190476190474
+frame_cnt_resolved: 7222
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 7222    18
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0008501236616012195
+result: (array([12.091742, 47.851292]), array([12.10517943, 47.85283448]), (12.105220530709992, 47.8528391943416), array([ -431.66249352, -1011.48393549]), array([ 579.88569849, -877.8404438 ]), array([ 582.97988508, -877.43164676]), 0.0008501236616012195)
+Position Resolved for device b77e53 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.860527  12.096997 475.      ]
+measurements to kf function: [[47.851292   12.091742  ]
+ [47.85283448 12.10517943]
+ [47.85283919 12.10522053]]
+Mean R in meters: 25.32857142857143
+main_tdoa_error: 1099.741906114862
+main_rssi_error: 1052.0794970322788
+main_fused_error: 1053.4475977218217
+main_kf_error: 1099.2527893765102
+main_kf_smoothed_error: 1099.2529144242762
+Komro Resolved Positions published to topics: geolocation/calculation/komro/b77e53 successfully for SENSONEOWASTESENSOR029
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 4150a2
+gets real true location
+device_name: SENSONEOWASTESENSOR030
+extracts only last but best UL frame
+frame_cnt_used: 7222
+length of dataframe before geoloc filter: 305
+length of dataframe after geoloc filter: 24
+temp_rssi_var_per_gw: [18.28571429  2.57142857  0.28571429]
+max. toa uncertainty in nsec: 179.0
+min. toa uncertainty in nsec: 36.4
+mean toa uncertainty in nsec: 100.01666666666665
+mean of snr in dBm: 3.483333333333333
+variance of rssi in dBm: 7.0476190476190474
+frame_cnt_resolved: 7222
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 7222    24
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0009783225760164045
+result: (array([12.12252051, 47.85856266]), array([12.12529062, 47.85607618]), (12.125319710725156, 47.85605006745048), array([ -9.66493562, -37.29094559]), array([ 187.22289111, -321.32976365]), array([ 189.2906336 , -324.31277759]), 0.0009783225760164045)
+Position Resolved for device 4150a2 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.858901  12.122631 475.      ]
+measurements to kf function: [[47.85856266 12.12252051]
+ [47.85607618 12.12529062]
+ [47.85605007 12.12531971]]
+Mean R in meters: 18.431349206349203
+main_tdoa_error: 38.52305288488876
+main_rssi_error: 371.8941085387975
+main_fused_error: 375.5126118731877
+main_kf_error: 38.49199501816248
+main_kf_smoothed_error: 38.49150809647641
+Komro Resolved Positions published to topics: geolocation/calculation/komro/4150a2 successfully for SENSONEOWASTESENSOR030
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 30b5f8
+gets real true location
+device_name: SENSONEOWASTESENSOR031
+extracts only last but best UL frame
+frame_cnt_used: 5442
+length of dataframe before geoloc filter: 149
+length of dataframe after geoloc filter: 20
+temp_rssi_var_per_gw: [ 0.33333333  0.         10.28571429]
+max. toa uncertainty in nsec: 245.0
+min. toa uncertainty in nsec: 126.2
+mean toa uncertainty in nsec: 170.14000000000001
+mean of snr in dBm: -5.92
+variance of rssi in dBm: 3.53968253968254
+frame_cnt_resolved: 5442
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 5442    20
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0004078979721858592
+result: (array([12.08474098, 47.864365  ]), array([12.12169722, 47.86092198]), (12.121810962731233, 47.860911362773365), array([-752.62914397, 4252.56557202]), array([1996.7429148 , 3766.24196918]), array([2005.20537022, 3764.7450849 ]), 0.0004078979721858592)
+Position Resolved for device 30b5f8 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.826407  12.096926 475.      ]
+measurements to kf function: [[47.864365   12.08474098]
+ [47.86092198 12.12169722]
+ [47.86091136 12.12181096]]
+Mean R in meters: 29.241587301587305
+main_tdoa_error: 4318.653097057116
+main_rssi_error: 4262.811377272057
+main_fused_error: 4265.460600102543
+main_kf_error: 4319.3526931058705
+main_kf_smoothed_error: 4319.352666221103
+Komro Resolved Positions published to topics: geolocation/calculation/komro/30b5f8 successfully for SENSONEOWASTESENSOR031
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: db9550
+gets real true location
+device_name: SENSONEOWASTESENSOR032
+extracts only last but best UL frame
+frame_cnt_used: 5439
+length of dataframe before geoloc filter: 287
+length of dataframe after geoloc filter: 24
+temp_rssi_var_per_gw: [1.75       5.24242424 2.33333333]
+max. toa uncertainty in nsec: 379.4
+min. toa uncertainty in nsec: 37.8
+mean toa uncertainty in nsec: 146.63750000000002
+mean of snr in dBm: 1.3374999999999997
+variance of rssi in dBm: 3.108585858585858
+frame_cnt_resolved: 5439
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 5439    24
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0005324189836727183
+result: (array([12.10853 , 47.866144]), array([12.11666335, 47.86259751]), (12.11668885398295, 47.86258638420541), array([426.10088945, 293.62076278]), array([1019.58284847, -123.24704942]), array([1021.44431696, -124.55456397]), 0.0005324189836727183)
+Position Resolved for device db9550 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.863362  12.102987 475.      ]
+measurements to kf function: [[47.866144   12.10853   ]
+ [47.86259751 12.11666335]
+ [47.86258638 12.11668885]]
+Mean R in meters: 25.2167297979798
+main_tdoa_error: 517.4699221456052
+main_rssi_error: 1027.0048783183313
+main_fused_error: 1029.0103653791555
+main_kf_error: 517.4898829195688
+main_kf_smoothed_error: 517.4899309313585
+Komro Resolved Positions published to topics: geolocation/calculation/komro/db9550 successfully for SENSONEOWASTESENSOR032
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: f62b1c
+gets real true location
+device_name: SENSONEOWASTESENSOR033
+extracts only last but best UL frame
+frame_cnt_used: 5584
+length of dataframe before geoloc filter: 83
+length of dataframe after geoloc filter: 6
+temp_rssi_var_per_gw: [5.33333333]
+max. toa uncertainty in nsec: 282.2
+min. toa uncertainty in nsec: 88.3
+mean toa uncertainty in nsec: 141.26666666666665
+mean of snr in dBm: -3.15
+variance of rssi in dBm: 5.333333333333333
+frame_cnt_resolved: 5584
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 5584    6
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0011771880971277043
+result: (array([12.155537, 47.872327]), array([12.10419954, 47.85466871]), (12.10391217054374, 47.85456976453996), array([5283.194764  , 3254.13071377]), array([1371.0809692 , 1434.50705659]), array([1349.17482749, 1424.31795275]), 0.0011771880971277043)
+Position Resolved for device f62b1c successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.841315  12.086617 475.      ]
+measurements to kf function: [[47.872327   12.155537  ]
+ [47.85466871 12.10419954]
+ [47.85456976 12.10391217]]
+Mean R in meters: 24.877777777777773
+main_tdoa_error: 6204.958792507099
+main_rssi_error: 1984.3572056265727
+main_fused_error: 1961.8752115377622
+main_kf_error: 6202.214743711344
+main_kf_smoothed_error: 6202.214736464017
+Komro Resolved Positions published to topics: geolocation/calculation/komro/f62b1c successfully for SENSONEOWASTESENSOR033
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1274406
+gets real true location
+device_name: SENSONEOWASTESENSOR034
+extracts only last but best UL frame
+frame_cnt_used: 5582
+length of dataframe before geoloc filter: 137
+length of dataframe after geoloc filter: 14
+temp_rssi_var_per_gw: [1.14285714 0.         5.33333333]
+max. toa uncertainty in nsec: 453.4
+min. toa uncertainty in nsec: 0.0
+mean toa uncertainty in nsec: 237.15714285714284
+mean of snr in dBm: -8.714285714285714
+variance of rssi in dBm: 2.1587301587301586
+frame_cnt_resolved: 5582
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 5582    14
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0009610234260123458
+result: (array([12.11424 , 47.852464]), array([12.10675184, 47.85392487]), (12.106741773678094, 47.85392683284532), array([754.3827866 , 877.72892453]), array([ 200.36265801, 1061.03441708]), array([ 199.61785494, 1061.28084584]), 0.0009610234260123458)
+Position Resolved for device 1274406 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.844323  12.104608 475.      ]
+measurements to kf function: [[47.852464   12.11424   ]
+ [47.85392487 12.10675184]
+ [47.85392683 12.10674177]]
+Mean R in meters: 40.06587301587301
+main_tdoa_error: 1157.3683310260776
+main_rssi_error: 1079.7866590019346
+main_fused_error: 1079.8908841926113
+main_kf_error: 1157.367277361998
+main_kf_smoothed_error: 1157.3671437364167
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1274406 successfully for SENSONEOWASTESENSOR034
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: f02537
+gets real true location
+device_name: SENSONEOWASTESENSOR035
+extracts only last but best UL frame
+frame_cnt_used: 5764
+length of dataframe before geoloc filter: 155
+length of dataframe after geoloc filter: 14
+temp_rssi_var_per_gw: [0.28571429 0.33333333 0.        ]
+max. toa uncertainty in nsec: 474.1
+min. toa uncertainty in nsec: 150.1
+mean toa uncertainty in nsec: 285.1571428571429
+mean of snr in dBm: -6.1000000000000005
+variance of rssi in dBm: 0.20634920634920637
+frame_cnt_resolved: 5764
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 5764    14
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0008707447543477821
+result: (array([12.131748, 47.860207]), array([12.14105936, 47.86513068]), (12.141060355917633, 47.86513120691693), array([2774.16499302, 3870.3995825 ]), array([3490.80174151, 4391.736421  ]), array([3490.87823673, 4391.79206952]), 0.0008707447543477821)
+Position Resolved for device f02537 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.824496  12.096649 475.      ]
+measurements to kf function: [[47.860207   12.131748  ]
+ [47.86513068 12.14105936]
+ [47.86513121 12.14106036]]
+Mean R in meters: 47.57777777777779
+main_tdoa_error: 4761.930736234067
+main_rssi_error: 5610.0842765590205
+main_fused_error: 5610.175438040178
+main_kf_error: 4762.149144756561
+main_kf_smoothed_error: 4762.149172923912
+Komro Resolved Positions published to topics: geolocation/calculation/komro/f02537 successfully for SENSONEOWASTESENSOR035
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: d7ea21
+gets real true location
+device_name: SENSONEOWASTESENSOR036
+extracts only last but best UL frame
+frame_cnt_used: 5607
+length of dataframe before geoloc filter: 105
+length of dataframe after geoloc filter: 6
+temp_rssi_var_per_gw: [3.]
+max. toa uncertainty in nsec: 440.8
+min. toa uncertainty in nsec: 241.2
+mean toa uncertainty in nsec: 339.78333333333336
+mean of snr in dBm: -4.033333333333333
+variance of rssi in dBm: 3.0
+frame_cnt_resolved: 5607
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 5607    6
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0013483665788416735
+result: (array([12.11459228, 47.85154203]), array([12.11982451, 47.85436717]), (12.119831333289742, 47.85437085791504), array([ 460.70186543, 1256.97860411]), array([ 863.7837322 , 1556.32275098]), array([ 864.30932411, 1556.71307582]), 0.0013483665788416735)
+Position Resolved for device d7ea21 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.840092  12.10907  475.      ]
+measurements to kf function: [[47.85154203 12.11459228]
+ [47.85436717 12.11982451]
+ [47.85437086 12.11983133]]
+Mean R in meters: 57.38055555555556
+main_tdoa_error: 1338.7462119487304
+main_rssi_error: 1779.9614718432226
+main_fused_error: 1780.5578362305553
+main_kf_error: 1338.8702538663113
+main_kf_smoothed_error: 1338.8702905865619
+Komro Resolved Positions published to topics: geolocation/calculation/komro/d7ea21 successfully for SENSONEOWASTESENSOR036
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 180a928
+gets real true location
+device_name: SENSONEOWASTESENSOR037
+extracts only last but best UL frame
+frame_cnt_used: 5580
+length of dataframe before geoloc filter: 130
+length of dataframe after geoloc filter: 7
+temp_rssi_var_per_gw: [0. 0.]
+max. toa uncertainty in nsec: 274.6
+min. toa uncertainty in nsec: 171.7
+mean toa uncertainty in nsec: 226.11428571428573
+mean of snr in dBm: -3.0714285714285716
+variance of rssi in dBm: 0.0
+frame_cnt_resolved: 5580
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 5580    7
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0010508454246235387
+result: (array([12.132153, 47.855402]), array([12.14391787, 47.86548863]), (12.14391786914003, 47.865488634397295), array([1322.61076575, 2887.39536134]), array([2244.02531654, 3975.70054964]), array([2244.02531654, 3975.70054964]), 0.0010508454246235387)
+Position Resolved for device 180a928 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.829013  12.115934 475.      ]
+measurements to kf function: [[47.855402   12.132153  ]
+ [47.86548863 12.14391787]
+ [47.86548863 12.14391787]]
+Mean R in meters: 37.68571428571429
+main_tdoa_error: 3175.901637393379
+main_rssi_error: 4565.286900257663
+main_fused_error: 4565.286900258474
+main_kf_error: 3176.474052808191
+main_kf_smoothed_error: 3176.474060765102
+Komro Resolved Positions published to topics: geolocation/calculation/komro/180a928 successfully for SENSONEOWASTESENSOR037
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 824aab
+gets real true location
+device_name: SENSONEOWASTESENSOR038
+extracts only last but best UL frame
+frame_cnt_used: 5558
+length of dataframe before geoloc filter: 74
+length of dataframe after geoloc filter: 20
+temp_rssi_var_per_gw: [ 3.          0.33333333 12.          0.          0.        ]
+max. toa uncertainty in nsec: 305.4
+min. toa uncertainty in nsec: 31.2
+mean toa uncertainty in nsec: 133.535
+mean of snr in dBm: -4.38
+variance of rssi in dBm: 3.066666666666667
+frame_cnt_resolved: 5558
+no. of unique frame counts: 1
+no. of unique gateway IDs: 5
+no_of_occurences: 5558    20
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0005681854540744331
+result: (array([12.114238, 47.852418]), array([12.13375345, 47.86089225]), (12.133819786351458, 47.860921046452034), array([  45.1076051 , 2602.91730446]), array([1539.79832263, 3490.28362809]), array([1544.87835696, 3493.29953723]), 0.0005681854540744331)
+Position Resolved for device 824aab successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.829013  12.114934 475.      ]
+measurements to kf function: [[47.852418   12.114238  ]
+ [47.86089225 12.13375345]
+ [47.86092105 12.13381979]]
+Mean R in meters: 23.022499999999997
+main_tdoa_error: 2603.3081242737862
+main_rssi_error: 3814.847137025449
+main_fused_error: 3819.658465702995
+main_kf_error: 2603.687088691787
+main_kf_smoothed_error: 2603.6871040783617
+Komro Resolved Positions published to topics: geolocation/calculation/komro/824aab successfully for SENSONEOWASTESENSOR038
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: bf7bb7
+gets real true location
+device_name: SW039
+extracts only last but best UL frame
+frame_cnt_used: 2014
+length of dataframe before geoloc filter: 124
+length of dataframe after geoloc filter: 13
+temp_rssi_var_per_gw: [0.         0.33333333 6.5       ]
+max. toa uncertainty in nsec: 348.0
+min. toa uncertainty in nsec: 66.3
+mean toa uncertainty in nsec: 198.71538461538464
+mean of snr in dBm: -2.746153846153846
+variance of rssi in dBm: 2.2777777777777777
+frame_cnt_resolved: 2014
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2014    13
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0013334717607814584
+result: (array([12.114176, 47.8524  ]), array([12.11363055, 47.85445875]), (12.113629628261263, 47.85446223274839), array([385.80757048, 263.55693862]), array([353.5614146 , 493.86848983]), array([353.50680576, 494.25852228]), 0.0013334717607814584)
+Position Resolved for device bf7bb7 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.849902  12.109157 475.      ]
+measurements to kf function: [[47.8524     12.114176  ]
+ [47.85445875 12.11363055]
+ [47.85446223 12.11362963]]
+Mean R in meters: 33.68867521367522
+main_tdoa_error: 467.23627998320467
+main_rssi_error: 607.3810658384185
+main_fused_error: 607.6664780634958
+main_kf_error: 467.23781113260884
+main_kf_smoothed_error: 467.23782840786663
+Komro Resolved Positions published to topics: geolocation/calculation/komro/bf7bb7 successfully for SW039
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: d82fb7
+gets real true location
+device_name: SW040
+extracts only last but best UL frame
+frame_cnt_used: 1992
+length of dataframe before geoloc filter: 55
+length of dataframe after geoloc filter: 7
+temp_rssi_var_per_gw: [56.33333333  0.5       ]
+max. toa uncertainty in nsec: 294.8
+min. toa uncertainty in nsec: 29.6
+mean toa uncertainty in nsec: 196.57142857142858
+mean of snr in dBm: 1.8000000000000003
+variance of rssi in dBm: 28.416666666666668
+frame_cnt_resolved: 1992
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 1992    7
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0012715415555806433
+result: (array([174.47259334,  71.07870359]), array([12.1259259 , 47.85703325]), (11.927510611632284, 46.54218663443511), array([ 945139.26499511, 6678943.054096  ]), array([ -123.54648206, -1029.41796831]), array([ -20717.30827646, -146561.17930765]), 0.0012715415555806433)
+Position Resolved for device d82fb7 successfully by Komro Resolver
+geo_fence_tdoa_ok: False
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.866325  12.127064 475.      ]
+measurements to kf function: [[47.85703325 12.1259259 ]
+ [46.54218663 11.92751061]]
+Mean R in meters: 39.86607142857143
+main_tdoa_error: 0
+main_rssi_error: 1036.8052308430874
+main_fused_error: 148018.1953081111
+main_kf_error: 1035.2385639127926
+main_kf_smoothed_error: 1035.2385639145846
+Komro Resolved Positions published to topics: geolocation/calculation/komro/d82fb7 successfully for SW040
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1a32609
+gets real true location
+device_name: SW041
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by 1a32609: 1
+device address: 1838138
+gets real true location
+device_name: SW042
+extracts only last but best UL frame
+frame_cnt_used: 2103
+length of dataframe before geoloc filter: 136
+length of dataframe after geoloc filter: 10
+temp_rssi_var_per_gw: [0.5        3.46666667]
+max. toa uncertainty in nsec: 460.6
+min. toa uncertainty in nsec: 163.0
+mean toa uncertainty in nsec: 271.88
+mean of snr in dBm: -3.4200000000000004
+variance of rssi in dBm: 1.9833333333333332
+frame_cnt_resolved: 2103
+no. of unique frame counts: 1
+no. of unique gateway IDs: 4
+no_of_occurences: 2103    10
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.00040329356772078747
+result: (array([12.114313, 47.852545]), array([12.14327094, 47.85965698]), (12.143302134658256, 47.85966463231212), array([ 457.54526158, 2446.38929535]), array([2652.79986191, 3156.19498063]), array([2655.16437204, 3156.95951278]), 0.00040329356772078747)
+Position Resolved for device 1838138 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.830408  12.109427 475.      ]
+measurements to kf function: [[47.852545   12.114313  ]
+ [47.85965698 12.14327094]
+ [47.85966463 12.14330213]]
+Mean R in meters: 45.80916666666666
+main_tdoa_error: 2488.808600671564
+main_rssi_error: 4122.973910068845
+main_fused_error: 4125.080751684833
+main_kf_error: 2488.7028137680018
+main_kf_smoothed_error: 2488.7028662176513
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1838138 successfully for SW042
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 713694
+gets real true location
+device_name: SW043
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 224
+length of dataframe after geoloc filter: 18
+temp_rssi_var_per_gw: [0.5        2.5        5.92857143]
+max. toa uncertainty in nsec: 354.7
+min. toa uncertainty in nsec: 21.5
+mean toa uncertainty in nsec: 122.35000000000001
+mean of snr in dBm: 1.7333333333333334
+variance of rssi in dBm: 2.9761904761904763
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2106    18
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0007823125045541055
+result: (array([12.091752, 47.851311]), array([12.10802317, 47.85406413]), (12.108081762946703, 47.85407404384062), array([-246.78055084,  255.78851259]), array([981.76486906, 516.0283811 ]), array([986.18850351, 516.96542911]), 0.0007823125045541055)
+Position Resolved for device 713694 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.849096  12.095175 475.      ]
+measurements to kf function: [[47.851311   12.091752  ]
+ [47.85406413 12.10802317]
+ [47.85407404 12.10808176]]
+Mean R in meters: 21.13571428571429
+main_tdoa_error: 355.42707191180494
+main_rssi_error: 1109.1201685220115
+main_fused_error: 1113.4725049854728
+main_kf_error: 355.0934138115319
+main_kf_smoothed_error: 355.0932450148023
+Komro Resolved Positions published to topics: geolocation/calculation/komro/713694 successfully for SW043
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 127c6b3
+gets real true location
+device_name: SW044
+extracts only last but best UL frame
+frame_cnt_used: 2107
+length of dataframe before geoloc filter: 218
+length of dataframe after geoloc filter: 4
+temp_rssi_var_per_gw: [2.]
+max. toa uncertainty in nsec: 396.8
+min. toa uncertainty in nsec: 272.9
+mean toa uncertainty in nsec: 311.425
+mean of snr in dBm: -6.95
+variance of rssi in dBm: 2.0
+frame_cnt_resolved: 2107
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2107    4
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0009868402382144342
+result: (array([12.10466501, 47.8556573 ]), array([12.1282248 , 47.85949046]), (12.12824714394059, 47.859494093090234), array([   5.5383234 , 2835.92289157]), array([1783.51383326, 3196.08890827]), array([1785.19954832, 3196.43038501]), 0.0009868402382144342)
+Position Resolved for device 127c6b3 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.830172  12.10601  475.      ]
+measurements to kf function: [[47.8556573  12.10466501]
+ [47.85949046 12.1282248 ]
+ [47.85949409 12.12824714]]
+Mean R in meters: 52.40416666666667
+main_tdoa_error: 2835.92829950475
+main_rssi_error: 3660.0417897856446
+main_fused_error: 3661.161650831783
+main_kf_error: 2835.891541771256
+main_kf_smoothed_error: 2835.8860911400834
+Komro Resolved Positions published to topics: geolocation/calculation/komro/127c6b3 successfully for SW044
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1369448
+gets real true location
+device_name: SW045
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by 1369448: 1
+device address: 85e385
+gets real true location
+device_name: SW046
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by 85e385: 0
+device address: 799b9
+gets real true location
+device_name: SW047
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by 799b9: 1
+device address:  3eae26
+gets real true location
+device_name: SW048
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by  3eae26: 0
+device address: 1257828
+gets real true location
+device_name: SW049
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 220
+length of dataframe after geoloc filter: 8
+temp_rssi_var_per_gw: [ 1.33333333 12.5       ]
+max. toa uncertainty in nsec: 433.1
+min. toa uncertainty in nsec: 106.9
+mean toa uncertainty in nsec: 252.525
+mean of snr in dBm: -2.925
+variance of rssi in dBm: 6.916666666666667
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 4
+no_of_occurences: 2106    8
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.001048388141089874
+result: (array([12.13043513, 47.82564392]), array([12.12685539, 47.85620453]), (12.126840855883684, 47.85632849173955), array([  257.58934568, -1238.58918953]), array([ 116.04090658, 2167.53960382]), array([ 115.4667559 , 2181.35558924]), 0.001048388141089874)
+Position Resolved for device 1257828 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.836688  12.126383 475.      ]
+measurements to kf function: [[47.82564392 12.13043513]
+ [47.85620453 12.12685539]
+ [47.85632849 12.12684086]]
+Mean R in meters: 43.81666666666666
+main_tdoa_error: 1265.0910842414528
+main_rssi_error: 2170.6435511462005
+main_fused_error: 2184.4094804870956
+main_kf_error: 1263.3380559624634
+main_kf_smoothed_error: 1263.3380502346959
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1257828 successfully for SW049
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address:  ad0826
+gets real true location
+device_name: SW051
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by  ad0826: 0
+device address: 1f5e407
+gets real true location
+device_name: SW052
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 265
+length of dataframe after geoloc filter: 22
+temp_rssi_var_per_gw: [75.          5.33333333  8.33333333  0.33333333  0.        ]
+max. toa uncertainty in nsec: 500.0
+min. toa uncertainty in nsec: 25.3
+mean toa uncertainty in nsec: 150.8272727272727
+mean of snr in dBm: 2.3363636363636364
+variance of rssi in dBm: 17.799999999999997
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 7
+no_of_occurences: 2106    22
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.00016722956595278268
+result: (array([12.11539128, 47.86683312]), array([12.13465407, 47.85898639]), (12.134995257178604, 47.858847353970646), array([    8.42462673, -1217.53260661]), array([ 1416.4917215 , -2143.18068729]), array([ 1441.43536407, -2159.57836817]), 0.00016722956595278268)
+Position Resolved for device 1f5e407 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.877771  12.114671 475.      ]
+measurements to kf function: [[47.86683312 12.11539128]
+ [47.85898639 12.13465407]
+ [47.85884735 12.13499526]]
+Mean R in meters: 29.587878787878786
+main_tdoa_error: 1217.561753052594
+main_rssi_error: 2568.9827277421164
+main_fused_error: 2596.4426889621673
+main_kf_error: 1217.56338324372
+main_kf_smoothed_error: 1217.563422551818
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1f5e407 successfully for SW052
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 126d71f
+gets real true location
+device_name: SW053
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 239
+length of dataframe after geoloc filter: 18
+temp_rssi_var_per_gw: [ 0.         41.14285714 14.        ]
+max. toa uncertainty in nsec: 274.4
+min. toa uncertainty in nsec: 5.4
+mean toa uncertainty in nsec: 90.25555555555553
+mean of snr in dBm: 4.555555555555555
+variance of rssi in dBm: 18.380952380952383
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2106    18
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.002562597156120533
+result: (array([12.1328504 , 47.85578977]), array([12.13155578, 47.85679066]), (12.131515689613407, 47.85682165962759), array([ 83.18891889, -43.73391625]), array([-9.5084044 , 71.09166789]), array([-12.37903057,  74.64755618]), 0.002562597156120533)
+Position Resolved for device 126d71f successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.856155  12.131718 475.      ]
+measurements to kf function: [[47.85578977 12.1328504 ]
+ [47.85679066 12.13155578]
+ [47.85682166 12.13151569]]
+Mean R in meters: 19.637830687830686
+main_tdoa_error: 93.9843160126902
+main_rssi_error: 71.72471677863875
+main_fused_error: 75.66702083312708
+main_kf_error: 93.97525334923671
+main_kf_smoothed_error: 93.97499251786996
+Komro Resolved Positions published to topics: geolocation/calculation/komro/126d71f successfully for SW053
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1cc7752
+gets real true location
+device_name: SW054
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by 1cc7752: 1
+device address: 5e30dc
+gets real true location
+device_name: SW055
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 115
+length of dataframe after geoloc filter: 3
+temp_rssi_var_per_gw: []
+/app/resolver_210526.py:348: RuntimeWarning: Mean of empty slice.
+  mean_rssi_var_dbm = temp_rssi_var_per_gw.mean()
+/usr/local/lib/python3.8/site-packages/numpy/core/_methods.py:188: RuntimeWarning: invalid value encountered in double_scalars
+  ret = ret.dtype.type(ret / rcount)
+max. toa uncertainty in nsec: 340.6
+min. toa uncertainty in nsec: 219.7
+mean toa uncertainty in nsec: 276.8666666666666
+mean of snr in dBm: -1.5999999999999999
+variance of rssi in dBm: nan
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2106    3
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0016453887436110785
+result: (array([12.11697269, 47.86991891]), array([12.12355539, 47.86120589]), (12.123570623016734, 47.861185727690035), array([ 136.38506926, -240.91790773]), array([  592.51813996, -1227.55238561]), array([  593.57353975, -1229.83525849]), 0.0016453887436110785)
+Position Resolved for device 5e30dc successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.872038  12.115031 475.      ]
+measurements to kf function: [[47.86991891 12.11697269]
+ [47.86120589 12.12355539]
+ [47.86118573 12.12357062]]
+Mean R in meters: 46.14444444444444
+main_tdoa_error: 276.8435034079578
+main_rssi_error: 1363.071020017395
+main_fused_error: 1365.585702223961
+main_kf_error: 276.93265742535715
+main_kf_smoothed_error: 276.9326989242084
+Komro Resolved Positions published to topics: geolocation/calculation/komro/5e30dc successfully for SW055
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: bb4cc2
+gets real true location
+device_name: SW057
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by bb4cc2: 1
+device address:  54934a
+gets real true location
+device_name: SW058
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by  54934a: 0
+device address:  753ba1
+gets real true location
+device_name: SW059
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by  753ba1: 0
+device address: ec5879
+gets real true location
+device_name: SW061
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by ec5879: 1
+device address: 1fbf380
+gets real true location
+device_name: SW062
+extracts only last but best UL frame
+frame_cnt_used: 2105
+length of dataframe before geoloc filter: 190
+length of dataframe after geoloc filter: 6
+temp_rssi_var_per_gw: [0.33333333]
+max. toa uncertainty in nsec: 359.8
+min. toa uncertainty in nsec: 273.8
+mean toa uncertainty in nsec: 327.0833333333333
+mean of snr in dBm: -4.05
+variance of rssi in dBm: 0.3333333333333333
+frame_cnt_resolved: 2105
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2105    6
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0009042241534715652
+result: (array([12.08001414, 47.83730279]), array([12.11751499, 47.85737304]), (12.117520631158259, 47.85737605761005), array([-1591.59299051, -1515.2006004 ]), array([1297.48982755,  609.78362716]), array([1297.92415364,  610.10308359]), 0.0009042241534715652)
+Position Resolved for device 1fbf380 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.851457  12.100497 475.      ]
+measurements to kf function: [[47.83730279 12.08001414]
+ [47.85737304 12.11751499]
+ [47.85737606 12.11752063]]
+Mean R in meters: 54.59722222222222
+main_tdoa_error: 2197.498829786558
+main_rssi_error: 1433.6373057930316
+main_fused_error: 1434.1662669307414
+main_kf_error: 2197.129020692212
+main_kf_smoothed_error: 2197.1290177992964
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1fbf380 successfully for SW062
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1135c1c
+gets real true location
+device_name: SW063
+extracts only last but best UL frame
+frame_cnt_used: 2102
+length of dataframe before geoloc filter: 270
+length of dataframe after geoloc filter: 5
+temp_rssi_var_per_gw: [1.33333333]
+max. toa uncertainty in nsec: 286.6
+min. toa uncertainty in nsec: 136.4
+mean toa uncertainty in nsec: 182.40000000000003
+mean of snr in dBm: -3.04
+variance of rssi in dBm: 1.3333333333333335
+frame_cnt_resolved: 2102
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2102    5
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0016062275434616787
+result: (array([12.132141, 47.855407]), array([12.14695548, 47.86681726]), (12.14697146958894, 47.86682957381943), array([ 869.2266117 , 1775.00409425]), array([2024.12712348, 3001.97043154]), array([2025.37363781, 3003.2947284 ]), 0.0016062275434616787)
+Position Resolved for device 1135c1c successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.839166  12.121419 475.      ]
+measurements to kf function: [[47.855407   12.132141  ]
+ [47.86681726 12.14695548]
+ [47.86682957 12.14697147]]
+Mean R in meters: 30.733333333333338
+main_tdoa_error: 1976.4094811294813
+main_rssi_error: 3620.623852854384
+main_fused_error: 3622.4187497266817
+main_kf_error: 1976.7831687411942
+main_kf_smoothed_error: 1976.7831551157137
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1135c1c successfully for SW063
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 20ccf6
+gets real true location
+device_name: SW064
+extracts only last but best UL frame
+frame_cnt_used: 2014
+length of dataframe before geoloc filter: 75
+length of dataframe after geoloc filter: 5
+temp_rssi_var_per_gw: [0.33333333]
+max. toa uncertainty in nsec: 427.2
+min. toa uncertainty in nsec: 315.2
+mean toa uncertainty in nsec: 384.4
+mean of snr in dBm: -5.14
+variance of rssi in dBm: 0.3333333333333333
+frame_cnt_resolved: 2014
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2014    5
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0011219759783195258
+result: (array([12.114173, 47.852325]), array([12.12185394, 47.85373054]), (12.121854920588865, 47.8537307226732), array([-784.6078695 , 1221.22486725]), array([-204.26058366, 1355.97748161]), array([-204.18634858, 1355.99471848]), 0.0011219759783195258)
+Position Resolved for device 20ccf6 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.841614  12.125255 475.      ]
+measurements to kf function: [[47.852325   12.114173  ]
+ [47.85373054 12.12185394]
+ [47.85373072 12.12185492]]
+Mean R in meters: 64.14999999999999
+main_tdoa_error: 1451.550786316595
+main_rssi_error: 1371.2757989049862
+main_fused_error: 1371.2817877750758
+main_kf_error: 1451.5522606654379
+main_kf_smoothed_error: 1451.5523448715314
+Komro Resolved Positions published to topics: geolocation/calculation/komro/20ccf6 successfully for SW064
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1d9a24c
+gets real true location
+device_name: SW065
+extracts only last but best UL frame
+frame_cnt_used: 1981
+length of dataframe before geoloc filter: 212
+length of dataframe after geoloc filter: 6
+temp_rssi_var_per_gw: [3.]
+max. toa uncertainty in nsec: 476.9
+min. toa uncertainty in nsec: 120.0
+mean toa uncertainty in nsec: 278.5833333333333
+mean of snr in dBm: -5.05
+variance of rssi in dBm: 3.0
+frame_cnt_resolved: 1981
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 1981    6
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0017772079485092202
+result: (array([12.09724125, 47.84495939]), array([12.11007603, 47.85542105]), (12.110096454826166, 47.85543768977446), array([ -10.32369222, -127.65889935]), array([993.34988308, 998.92227391]), array([ 994.94656815, 1000.71448543]), 0.0017772079485092202)
+Position Resolved for device 1d9a24c successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.84611   12.097315 475.      ]
+measurements to kf function: [[47.84495939 12.09724125]
+ [47.85542105 12.11007603]
+ [47.85543769 12.11009645]]
+Mean R in meters: 47.18055555555555
+main_tdoa_error: 128.07565422400194
+main_rssi_error: 1408.7546626462624
+main_fused_error: 1411.1513578712381
+main_kf_error: 127.7864045338607
+main_kf_smoothed_error: 127.78637786407212
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1d9a24c successfully for SW065
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1ae331a
+gets real true location
+device_name:  SW066
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 318
+length of dataframe after geoloc filter: 9
+temp_rssi_var_per_gw: [5.33333333 1.33333333]
+max. toa uncertainty in nsec: 350.4
+min. toa uncertainty in nsec: 41.7
+mean toa uncertainty in nsec: 158.14444444444445
+mean of snr in dBm: 1.4444444444444444
+variance of rssi in dBm: 3.333333333333333
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2106    9
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0017492023369107801
+result: (array([12.11833328, 47.85854898]), array([12.12315563, 47.85454994]), (12.123170669281985, 47.85453746949222), array([-116.86922666,  126.99394597]), array([ 227.23435288, -330.86686543]), array([ 228.30744387, -332.29470966]), 0.0017492023369107801)
+Position Resolved for device 1ae331a successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.857447  12.119957 475.      ]
+measurements to kf function: [[47.85854898 12.11833328]
+ [47.85454994 12.12315563]
+ [47.85453747 12.12317067]]
+Mean R in meters: 27.19074074074074
+main_tdoa_error: 172.58585821383122
+main_rssi_error: 401.3830262629261
+main_fused_error: 403.1675371304714
+main_kf_error: 172.26915900583376
+main_kf_smoothed_error: 172.26908172576665
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1ae331a successfully for  SW066
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 24c002
+gets real true location
+device_name: SW067
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 248
+length of dataframe after geoloc filter: 10
+temp_rssi_var_per_gw: [ 0.33333333 12.          2.        ]
+max. toa uncertainty in nsec: 398.1
+min. toa uncertainty in nsec: 40.0
+mean toa uncertainty in nsec: 163.70000000000002
+mean of snr in dBm: 2.5500000000000007
+variance of rssi in dBm: 4.777777777777778
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2106    10
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.00132162482584601
+result: (array([50.42733063, 78.66179785]), array([12.12876405, 47.85719713]), (12.082077554129727, 47.713721114185056), array([ 946924.61905073, 3657176.51951325]), array([  50.52855267, -457.79190358]), array([ -4043.14652545, -16271.05216255]), 0.00132162482584601)
+Position Resolved for device 24c002 successfully by Komro Resolver
+geo_fence_tdoa_ok: False
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.861294  12.127862 475.      ]
+measurements to kf function: [[47.85719713 12.12876405]
+ [47.71372111 12.08207755]]
+Mean R in meters: 28.477777777777778
+main_tdoa_error: 0
+main_rssi_error: 460.57199395691185
+main_fused_error: 16765.86330322825
+main_kf_error: 463.7790933076999
+main_kf_smoothed_error: 463.77909480853106
+Komro Resolved Positions published to topics: geolocation/calculation/komro/24c002 successfully for SW067
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 131e6b9
+gets real true location
+device_name: SW068
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by 131e6b9: 1
+device address: f3303a
+gets real true location
+device_name: SW069
+extracts only last but best UL frame
+frame_cnt_used: 2105
+length of dataframe before geoloc filter: 418
+length of dataframe after geoloc filter: 11
+temp_rssi_var_per_gw: [18. 48. 27.]
+max. toa uncertainty in nsec: 431.8
+min. toa uncertainty in nsec: 3.6
+mean toa uncertainty in nsec: 120.0181818181818
+mean of snr in dBm: 4.2727272727272725
+variance of rssi in dBm: 31.0
+frame_cnt_resolved: 2105
+no. of unique frame counts: 1
+no. of unique gateway IDs: 4
+no_of_occurences: 2105    11
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0021443838928164594
+result: (array([12.12395363, 47.85259281]), array([12.12679664, 47.85358759]), (12.126909235410295, 47.85362698679611), array([ 37.62925715, 172.40127306]), array([254.39513486, 275.0338045 ]), array([262.98021523, 279.098598  ]), 0.0021443838928164594)
+Position Resolved for device f3303a successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.851031  12.123537 475.      ]
+measurements to kf function: [[47.85259281 12.12395363]
+ [47.85358759 12.12679664]
+ [47.85362699 12.12690924]]
+Mean R in meters: 27.7530303030303
+main_tdoa_error: 176.4600803159871
+main_rssi_error: 374.6471383231096
+main_fused_error: 383.47701496882297
+main_kf_error: 176.440617326688
+main_kf_smoothed_error: 176.44017307157623
+Komro Resolved Positions published to topics: geolocation/calculation/komro/f3303a successfully for SW069
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1640c76
+gets real true location
+device_name: SW070
+extracts only last but best UL frame
+frame_cnt_used: 2103
+length of dataframe before geoloc filter: 211
+length of dataframe after geoloc filter: 8
+temp_rssi_var_per_gw: [5.33333333 0.33333333]
+max. toa uncertainty in nsec: 310.2
+min. toa uncertainty in nsec: 63.1
+mean toa uncertainty in nsec: 154.8
+mean of snr in dBm: 1.3875000000000002
+variance of rssi in dBm: 2.833333333333333
+frame_cnt_resolved: 2103
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2103    8
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0008567870272468871
+result: (array([12.11363866, 47.85518941]), array([12.11560946, 47.85662462]), (12.115614799009851, 47.85662850209049), array([ -13.87658141, -100.03706418]), array([139.48758217,  53.94793352]), array([139.90272249,  54.36475437]), 0.0008567870272468871)
+Position Resolved for device 1640c76 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.856093  12.113774 475.      ]
+measurements to kf function: [[47.85518941 12.11363866]
+ [47.85662462 12.11560946]
+ [47.8566285  12.1156148 ]]
+Mean R in meters: 26.508333333333333
+main_tdoa_error: 100.99491928346241
+main_rssi_error: 149.55656157813547
+main_fused_error: 150.09429794891176
+main_kf_error: 100.95782924776297
+main_kf_smoothed_error: 100.95742737359643
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1640c76 successfully for SW070
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1070b9b
+gets real true location
+device_name: SW071
+extracts only last but best UL frame
+frame_cnt_used: 2015
+length of dataframe before geoloc filter: 203
+length of dataframe after geoloc filter: 6
+temp_rssi_var_per_gw: [8.33333333]
+max. toa uncertainty in nsec: 308.9
+min. toa uncertainty in nsec: 54.1
+mean toa uncertainty in nsec: 141.6
+mean of snr in dBm: 2.0833333333333335
+variance of rssi in dBm: 8.333333333333334
+frame_cnt_resolved: 2015
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2015    6
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0009495230705594623
+result: (array([12.09484758, 47.8561792 ]), array([12.11576119, 47.85522037]), (12.115944305592429, 47.85521195917617), array([-856.79580971, -213.85342041]), array([ 703.41850021, -379.05237086]), array([ 717.07993296, -380.49887365]), 0.0009495230705594623)
+Position Resolved for device 1070b9b successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.85839  12.10618 475.     ]
+measurements to kf function: [[47.8561792  12.09484758]
+ [47.85522037 12.11576119]
+ [47.85521196 12.11594431]]
+Mean R in meters: 25.68333333333333
+main_tdoa_error: 883.0811655537609
+main_rssi_error: 799.0483629197782
+main_fused_error: 811.777693149604
+main_kf_error: 883.0042067895174
+main_kf_smoothed_error: 883.0042013506066
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1070b9b successfully for SW071
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: b31ae1
+gets real true location
+device_name: SW072
+extracts only last but best UL frame
+frame_cnt_used: 2014
+length of dataframe before geoloc filter: 190
+length of dataframe after geoloc filter: 22
+temp_rssi_var_per_gw: [14.81818182  0.78571429  0.        ]
+max. toa uncertainty in nsec: 484.6
+min. toa uncertainty in nsec: 28.2
+mean toa uncertainty in nsec: 200.55909090909088
+mean of snr in dBm: 0.06818181818181822
+variance of rssi in dBm: 5.201298701298701
+frame_cnt_resolved: 2014
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2014    22
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0005753749063580877
+result: (array([12.10852 , 47.866126]), array([12.1121217 , 47.86141121]), (12.112135525750098, 47.86139310327488), array([ 12.21468179, 358.10303725]), array([ 261.94540295, -175.92999951]), array([ 262.90430912, -177.9805585 ]), 0.0005753749063580877)
+Position Resolved for device b31ae1 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.862904  12.108536 475.      ]
+measurements to kf function: [[47.866126   12.10852   ]
+ [47.86141121 12.1121217 ]
+ [47.8613931  12.11213553]]
+Mean R in meters: 34.72683982683982
+main_tdoa_error: 358.31129446681143
+main_rssi_error: 315.5420080683857
+main_fused_error: 317.4834719463998
+main_kf_error: 358.29268917111773
+main_kf_smoothed_error: 358.2926637790069
+Komro Resolved Positions published to topics: geolocation/calculation/komro/b31ae1 successfully for SW072
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: e327d1
+gets real true location
+device_name: SW073
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 478
+length of dataframe after geoloc filter: 17
+temp_rssi_var_per_gw: [3.         8.33333333 0.33333333 3.        ]
+max. toa uncertainty in nsec: 260.1
+min. toa uncertainty in nsec: 0.0
+mean toa uncertainty in nsec: 92.91764705882352
+mean of snr in dBm: 4.541176470588235
+variance of rssi in dBm: 3.666666666666667
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 5
+no_of_occurences: 2106    17
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.00047424783984167436
+result: (array([12.108551, 47.86612 ]), array([12.11926814, 47.85832393]), (12.119330870033956, 47.85827828520468), array([-422.31391515,  145.00405418]), array([ 346.77342185, -751.32952142]), array([ 351.27592776, -756.57697126]), 0.00047424783984167436)
+Position Resolved for device e327d1 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.864959  12.114263 475.      ]
+measurements to kf function: [[47.86612    12.108551  ]
+ [47.85832393 12.11926814]
+ [47.85827829 12.11933087]]
+Mean R in meters: 16.402941176470588
+main_tdoa_error: 446.51452234083115
+main_rssi_error: 827.4949279937356
+main_fused_error: 834.1483626211774
+main_kf_error: 446.4144526535517
+main_kf_smoothed_error: 446.41441670752846
+Komro Resolved Positions published to topics: geolocation/calculation/komro/e327d1 successfully for SW073
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1f1dcbf
+gets real true location
+device_name: SW074
+extracts only last but best UL frame
+frame_cnt_used: 2105
+length of dataframe before geoloc filter: 192
+length of dataframe after geoloc filter: 6
+temp_rssi_var_per_gw: [1.33333333]
+max. toa uncertainty in nsec: 171.1
+min. toa uncertainty in nsec: 79.0
+mean toa uncertainty in nsec: 129.9
+mean of snr in dBm: 2.2333333333333334
+variance of rssi in dBm: 1.3333333333333333
+frame_cnt_resolved: 2105
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 2105    6
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0011055272753426873
+result: (array([12.114204, 47.85236 ]), array([12.11985415, 47.85423611]), (12.119862715231323, 47.85423895258252), array([ -145.46766422, -1247.18046561]), array([  284.93336533, -1054.47005659]), array([  285.58594145, -1054.17786814]), 0.0011055272753426873)
+Position Resolved for device 1f1dcbf successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.863616  12.115524 475.      ]
+measurements to kf function: [[47.85236    12.114204  ]
+ [47.85423611 12.11985415]
+ [47.85423895 12.11986272]]
+Mean R in meters: 21.983333333333334
+main_tdoa_error: 1255.6352795075247
+main_rssi_error: 1092.2884797219501
+main_fused_error: 1092.1768664633205
+main_kf_error: 1255.6052680390294
+main_kf_smoothed_error: 1255.6055030165455
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1f1dcbf successfully for SW074
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1fb7abf
+gets real true location
+device_name: SW075
+extracts only last but best UL frame
+frame_cnt_used: 2105
+length of dataframe before geoloc filter: 59
+length of dataframe after geoloc filter: 10
+temp_rssi_var_per_gw: [0. 2. 0.]
+max. toa uncertainty in nsec: 447.4
+min. toa uncertainty in nsec: 63.7
+mean toa uncertainty in nsec: 231.64000000000001
+mean of snr in dBm: -2.54
+variance of rssi in dBm: 0.6666666666666666
+frame_cnt_resolved: 2105
+no. of unique frame counts: 1
+no. of unique gateway IDs: 4
+no_of_occurences: 2105    10
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0003326622711684392
+result: (array([12.132146, 47.855382]), array([12.13880894, 47.87716401]), (12.138811770542668, 47.877173260165144), array([  529.44380553, -1765.61624565]), array([1117.51173033,  636.51870457]), array([1117.76146416,  637.53881523]), 0.0003326622711684392)
+Position Resolved for device 1fb7abf successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.871071  12.124199 475.      ]
+measurements to kf function: [[47.855382   12.132146  ]
+ [47.87716401 12.13880894]
+ [47.87717326 12.13881177]]
+Mean R in meters: 38.77333333333333
+main_tdoa_error: 1843.288222208939
+main_rssi_error: 1286.0748534570678
+main_fused_error: 1286.7969659900398
+main_kf_error: 1842.492258942663
+main_kf_smoothed_error: 1842.4922450474178
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1fb7abf successfully for SW075
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1b06ec5
+gets real true location
+device_name: SW076
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by 1b06ec5: 1
+device address: f42339
+gets real true location
+device_name: SW077
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 440
+length of dataframe after geoloc filter: 32
+temp_rssi_var_per_gw: [ 7.         24.5         5.8        10.5         5.95238095 14.66666667]
+max. toa uncertainty in nsec: 421.9
+min. toa uncertainty in nsec: 44.2
+mean toa uncertainty in nsec: 179.34375
+mean of snr in dBm: 0.953125
+variance of rssi in dBm: 11.403174603174604
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 7
+no_of_occurences: 2106    32
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.00027902108425151767
+result: (array([12.127328, 47.852616]), array([12.13213773, 47.85615872]), (12.132183268032234, 47.85619225289199), array([-531.16796634,  598.40503146]), array([-156.78422961,  978.73097723]), array([-153.24002459,  982.33143578]), 0.00027902108425151767)
+Position Resolved for device f42339 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.847416  12.134716 475.      ]
+measurements to kf function: [[47.852616   12.127328  ]
+ [47.85615872 12.13213773]
+ [47.85619225 12.13218327]]
+Mean R in meters: 32.74141865079365
+main_tdoa_error: 800.1424811511164
+main_rssi_error: 991.2091708874319
+main_fused_error: 994.2120271163188
+main_kf_error: 800.2240443231211
+main_kf_smoothed_error: 800.2241629790857
+Komro Resolved Positions published to topics: geolocation/calculation/komro/f42339 successfully for SW077
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 2cee3a
+gets real true location
+device_name: SW079
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 237
+length of dataframe after geoloc filter: 13
+temp_rssi_var_per_gw: [ 3.         12.         33.33333333]
+max. toa uncertainty in nsec: 377.0
+min. toa uncertainty in nsec: 18.6
+mean toa uncertainty in nsec: 150.56923076923078
+mean of snr in dBm: 2.930769230769231
+variance of rssi in dBm: 16.11111111111111
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 4
+no_of_occurences: 2106    13
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0013134164280558115
+result: (array([12.12803316, 47.85625913]), array([12.12654588, 47.85624426]), (12.12652203002792, 47.85624402484615), array([111.71914301, -93.61419045]), array([  0.41910831, -91.12720696]), array([ -1.36558471, -91.08732825]), 0.0013134164280558115)
+Position Resolved for device 2cee3a successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.857063  12.126495 475.      ]
+measurements to kf function: [[47.85625913 12.12803316]
+ [47.85624426 12.12654588]
+ [47.85624402 12.12652203]]
+Mean R in meters: 29.122649572649575
+main_tdoa_error: 145.75590406240167
+main_rssi_error: 91.12817072612538
+main_fused_error: 91.09756411983372
+main_kf_error: 145.73831734168493
+main_kf_smoothed_error: 145.73790253407552
+Komro Resolved Positions published to topics: geolocation/calculation/komro/2cee3a successfully for SW079
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1e0ea9d
+gets real true location
+device_name: SW080
+extracts only last but best UL frame
+frame_cnt_used: 2106
+length of dataframe before geoloc filter: 287
+length of dataframe after geoloc filter: 18
+temp_rssi_var_per_gw: [16.33333333  0.          0.28571429  0.33333333]
+max. toa uncertainty in nsec: 214.4
+min. toa uncertainty in nsec: 17.9
+mean toa uncertainty in nsec: 73.97777777777777
+mean of snr in dBm: 3.1111111111111103
+variance of rssi in dBm: 4.238095238095237
+frame_cnt_resolved: 2106
+no. of unique frame counts: 1
+no. of unique gateway IDs: 4
+no_of_occurences: 2106    18
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0010177901263294538
+result: (array([12.12838879, 47.85316086]), array([12.12602928, 47.85403275]), (12.1260091712735, 47.85404018348724), array([ 30.9975469 , -94.53495313]), array([-141.8821236 ,    8.92432817]), array([-143.35534799,    9.80597456]), 0.0010177901263294538)
+Position Resolved for device 1e0ea9d successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.854     12.127928 475.      ]
+measurements to kf function: [[47.85316086 12.12838879]
+ [47.85403275 12.12602928]
+ [47.85404018 12.12600917]]
+Mean R in meters: 13.38915343915344
+main_tdoa_error: 99.48721162127131
+main_rssi_error: 142.1625148612747
+main_fused_error: 143.69033695605611
+main_kf_error: 99.38692291457953
+main_kf_smoothed_error: 99.38663092608178
+Komro Resolved Positions published to topics: geolocation/calculation/komro/1e0ea9d successfully for SW080
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 11dbae
+gets real true location
+device_name: SW081
+extracts only last but best UL frame
+frame_cnt_used: 1655
+length of dataframe before geoloc filter: 460
+length of dataframe after geoloc filter: 12
+temp_rssi_var_per_gw: [108.           0.33333333  75.        ]
+max. toa uncertainty in nsec: 326.5
+min. toa uncertainty in nsec: 7.3
+mean toa uncertainty in nsec: 141.4
+mean of snr in dBm: 0.8166666666666665
+variance of rssi in dBm: 61.11111111111111
+frame_cnt_resolved: 1655
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 1655    12
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.001340552462644304
+result: (array([12.13183755, 47.86325285]), array([12.12596776, 47.85602136]), (12.125568175740138, 47.855529004240324), array([174.24661397, 262.36626404]), array([-294.63076922, -524.93804293]), array([-326.5539287 , -578.54105696]), 0.001340552462644304)
+Position Resolved for device 11dbae successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.860837  12.129641 475.      ]
+measurements to kf function: [[47.86325285 12.13183755]
+ [47.85602136 12.12596776]
+ [47.855529   12.12556818]]
+Mean R in meters: 38.84444444444444
+main_tdoa_error: 314.9570430860685
+main_rssi_error: 601.9694669006107
+main_fused_error: 664.339689415526
+main_kf_error: 314.821447290231
+main_kf_smoothed_error: 314.8213961323975
+Komro Resolved Positions published to topics: geolocation/calculation/komro/11dbae successfully for SW081
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 3f3cf3
+gets real true location
+device_name: SW082
+extracts only last but best UL frame
+frame_cnt_used: 1564
+length of dataframe before geoloc filter: 187
+length of dataframe after geoloc filter: 7
+temp_rssi_var_per_gw: [12.]
+max. toa uncertainty in nsec: 382.9
+min. toa uncertainty in nsec: 87.8
+mean toa uncertainty in nsec: 235.22857142857143
+mean of snr in dBm: -1.7571428571428573
+variance of rssi in dBm: 12.0
+frame_cnt_resolved: 1564
+no. of unique frame counts: 1
+no. of unique gateway IDs: 4
+no_of_occurences: 1564    7
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.002021132215429052
+result: (array([12.127314, 47.852612]), array([12.12895874, 47.85495648]), (12.128971214776548, 47.85497425199445), array([-340.36341915,  959.778072  ]), array([-207.65114476, 1215.74233434]), array([-206.6450181 , 1217.68286673]), 0.002021132215429052)
+Position Resolved for device 3f3cf3 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.844101  12.132334 475.      ]
+measurements to kf function: [[47.852612   12.127314  ]
+ [47.85495648 12.12895874]
+ [47.85497425 12.12897121]]
+Mean R in meters: 42.2047619047619
+main_tdoa_error: 1018.3423808239575
+main_rssi_error: 1233.3484590396508
+main_fused_error: 1235.0925987305989
+main_kf_error: 1018.3431897080354
+main_kf_smoothed_error: 1018.3432648052295
+Komro Resolved Positions published to topics: geolocation/calculation/komro/3f3cf3 successfully for SW082
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: d621a1
+gets real true location
+device_name: AllinOne7
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by d621a1: 1
+device address: 354b3a
+gets real true location
+device_name: AllinOne8
+extracts only last but best UL frame
+frame_cnt_used: 1020
+length of dataframe before geoloc filter: 787
+length of dataframe after geoloc filter: 9
+temp_rssi_var_per_gw: [40.33333333  3.        ]
+max. toa uncertainty in nsec: 337.9
+min. toa uncertainty in nsec: 16.2
+mean toa uncertainty in nsec: 147.58888888888887
+mean of snr in dBm: 1.7666666666666666
+variance of rssi in dBm: 21.666666666666668
+frame_cnt_resolved: 1020
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 1020    9
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.02332362929854827
+result: (array([12.132163, 47.855409]), array([12.13204324, 47.85688523]), (12.132040586018313, 47.85691790172254), array([-41.52957976,   2.35300264]), array([-44.39343875, 166.73813437]), array([-44.45682094, 170.37626387]), 0.02332362929854827)
+Position Resolved for device 354b3a successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.85540172  12.13271865 475.        ]
+measurements to kf function: [[47.855409   12.132163  ]
+ [47.85688523 12.13204324]
+ [47.8569179  12.13204059]]
+Mean R in meters: 30.014814814814812
+main_tdoa_error: 41.59618511482782
+main_rssi_error: 172.54675556511577
+main_fused_error: 176.08089112701472
+main_kf_error: 41.60982534740681
+main_kf_smoothed_error: 41.609904021562976
+Komro Resolved Positions published to topics: geolocation/calculation/komro/354b3a successfully for AllinOne8
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 82c328
+gets real true location
+device_name: PeopleCounter2
+extracts only last but best UL frame
+frame_cnt_used: 10935
+length of dataframe before geoloc filter: 560
+length of dataframe after geoloc filter: 18
+temp_rssi_var_per_gw: [0.28571429 0.         1.14285714]
+max. toa uncertainty in nsec: 358.0
+min. toa uncertainty in nsec: 69.5
+mean toa uncertainty in nsec: 187.05555555555554
+mean of snr in dBm: -0.6666666666666665
+variance of rssi in dBm: 0.4761904761904761
+frame_cnt_resolved: 10935
+no. of unique frame counts: 1
+no. of unique gateway IDs: 3
+no_of_occurences: 10935    18
+Name: frame_cnt, dtype: int64
+A: -20.34
+n: 2
+HDOP_calculated: 0.0024701056974641192
+result: (array([12.13413985, 47.85653835]), array([12.13152324, 47.85606704]), (12.131522261241928, 47.856066860072374), array([110.98628867, 122.36639907]), array([-86.66296442,  77.25770326]), array([-86.73720454,  77.24075974]), 0.0024701056974641192)
+Position Resolved for device 82c328 successfully by Komro Resolver
+geo_fence_tdoa_ok: True
+geo_fence_fused_ok: True
+not calling previous KF results
+ground truth: [ 47.85540172  12.13271865 475.        ]
+measurements to kf function: [[47.85653835 12.13413985]
+ [47.85606704 12.13152324]
+ [47.85606686 12.13152226]]
+Mean R in meters: 31.294973544973544
+main_tdoa_error: 165.20136771283254
+main_rssi_error: 116.10005217546319
+main_fused_error: 116.1442104293797
+main_kf_error: 165.20969366789777
+main_kf_smoothed_error: 165.20961853151744
+Komro Resolved Positions published to topics: geolocation/calculation/komro/82c328 successfully for PeopleCounter2
+Kalman Filter applied & published for TDOA, RSSI & Fused Results successfully
+device address: 1d289b5
+gets real true location
+device_name: SENSONEOWASTESENSOR012
+extracts only last but best UL frame
+Exception: IndexError
+num. of gateways reached per uplink by 1d289b5: 1
+device_address_lists are published on topic geolocation/device_list
+Timer starts....3600 seconds!
+

@@ -1,0 +1,540 @@
+Agent pid 21
+Enter passphrase for /home/thangaraj/.ssh/id_rsa:
+Identity added: /home/thangaraj/.ssh/id_rsa (rsa-key-20191127)
+thangaraj@KOM1260:~$ ls
+thangaraj@KOM1260:~$ cd winhome
+-bash: cd: winhome: No such file or directory
+thangaraj@KOM1260:~$ cd /
+thangaraj@KOM1260:/$ ls
+bin   dev  home  lib    lib64   lost+found  mnt  proc  run   snap  sys  usr
+boot  etc  init  lib32  libx32  media       opt  root  sbin  srv   tmp  var
+thangaraj@KOM1260:/$ cd /mnt
+thangaraj@KOM1260:/mnt$ ls
+c  wsl
+thangaraj@KOM1260:/mnt$ cd c
+thangaraj@KOM1260:/mnt/c$ ls
+ls: cannot access 'DumpStack.log.tmp': Permission denied
+ls: cannot access 'hiberfil.sys': Permission denied
+ls: cannot access 'pagefile.sys': Permission denied
+ls: cannot access 'swapfile.sys': Permission denied
+'$Recycle.Bin'                  Intel                  Programme                    Windows        salt
+ Config.Msi                     MSOCache               Recovery                     end            scripts
+'Documents and Settings'        PerfLogs               ST                           error_maps     swapfile.sys
+'Dokumente und Einstellungen'  'Program Files'        'System Volume Information'   hiberfil.sys   zfa-dcc
+ DumpStack.log                 'Program Files (x86)'   Tools                        kf_maps        zfa-komro
+ DumpStack.log.tmp              ProgramData            Users                        pagefile.sys   zfa-stern
+thangaraj@KOM1260:/mnt/c$ cd Users/
+thangaraj@KOM1260:/mnt/c/Users$ ls
+'All Users'   Default  'Default User'   Public   adm-wolafka   admin   desktop.ini   thangaraj
+thangaraj@KOM1260:/mnt/c/Users$ cd thangaraj/
+thangaraj@KOM1260:/mnt/c/Users/thangaraj$ cd geolocation
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ ls
+ Calculate_A_n_RSSI_online.py   __pycache__          docker_console_logs_210526.txt   requirements.txt
+'Docker README.txt'             create_db_table.py   evaluate_kom.py                  resolver.py
+ Dockerfile                     datasets             query_best_results.py            subscriber_db.py
+ KOMRO_GRS_in_Docker.pptx       docker-compose.yml   readme.txt
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ git status
+On branch query_best_results
+Your branch is ahead of 'origin/query_best_results' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .idea/vcs.xml
+        modified:   Calculate_A_n_RSSI_online.py
+        modified:   create_db_table.py
+        modified:   datasets/TrueLocations.csv
+        modified:   docker_console_logs_210526.txt
+        modified:   evaluate_kom.py
+        modified:   query_best_results.py
+        modified:   resolver.py
+        modified:   subscriber_db.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$ docker build -t grs-docker .
+Sending build context to Docker daemon  177.2MB
+Step 1/9 : FROM python:3.8.1-alpine3.11
+3.8.1-alpine3.11: Pulling from library/python
+c9b1b535fdd9: Pull complete
+2cc5ad85d9ab: Pull complete
+61614c1a5710: Pull complete
+0522d30cde10: Pull complete
+938854eeb444: Pull complete
+Digest: sha256:50c60fffe5451e18af2c53d75b6864b5a0fcb458e239302cc218064ce4946ce7
+Status: Downloaded newer image for python:3.8.1-alpine3.11
+ ---> a1cd5654cf3c
+Step 2/9 : ENV LC_ALL=C.UTF-8
+ ---> Running in eea0e785c291
+Removing intermediate container eea0e785c291
+ ---> 83391a5bd921
+Step 3/9 : ENV LANG=C.UTF-8
+ ---> Running in 4e9b4c105f14
+Removing intermediate container 4e9b4c105f14
+ ---> 2543af4c118c
+Step 4/9 : ENV PROJ_DIR=/usr
+ ---> Running in 9fd494323ced
+Removing intermediate container 9fd494323ced
+ ---> 55bec13ee02f
+Step 5/9 : RUN addgroup -S appuser ; adduser -S appuser -G appuser -h /app ;    chown appuser:appuser /app
+ ---> Running in fa3dcda27b4d
+Removing intermediate container fa3dcda27b4d
+ ---> 453f884661bb
+Step 6/9 : WORKDIR /app
+ ---> Running in 227359f6b3e5
+Removing intermediate container 227359f6b3e5
+ ---> 8acbbe04f47b
+Step 7/9 : COPY --chown=appuser:appuser / /app
+ ---> ea4cda2d4d4f
+Step 8/9 : RUN apk update     && apk add --upgrade --no-cache       python3 libpq uwsgi-python3                 python3-dev py3-pip alpine-sdk postgresql-dev postgresql                proj proj-dev           proj-util         bash openssh curl ca-certificates openssl less htop           g++ make wget rsync         build-base libpng-dev freetype-dev libexecinfo-dev openblas-dev libgomp lapack-dev          libgcc libquadmath musl                 libgfortran             lapack-dev      &&  pip install --no-cache-dir --upgrade pip     &&  pip install --no-cache-dir -r requirements.txt
+ ---> Running in 3ee0497b9362
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.11/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.11/community/x86_64/APKINDEX.tar.gz
+v3.11.11-46-g890023a769 [http://dl-cdn.alpinelinux.org/alpine/v3.11/main]
+v3.11.11-24-g127ddb5cee [http://dl-cdn.alpinelinux.org/alpine/v3.11/community]
+OK: 11289 distinct packages available
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.11/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.11/community/x86_64/APKINDEX.tar.gz
+(1/101) Upgrading musl (1.1.24-r0 -> 1.1.24-r3)
+(2/101) Upgrading libcrypto1.1 (1.1.1d-r3 -> 1.1.1k-r0)
+(3/101) Upgrading ncurses-terminfo-base (6.1_p20191130-r0 -> 6.1_p20200118-r4)
+(4/101) Upgrading ncurses-libs (6.1_p20191130-r0 -> 6.1_p20200118-r4)
+(5/101) Purging ncurses-terminfo (6.1_p20191130-r0)
+(6/101) Upgrading libssl1.1 (1.1.1d-r3 -> 1.1.1k-r0)
+(7/101) Upgrading sqlite-libs (3.30.1-r1 -> 3.30.1-r2)
+(8/101) Upgrading busybox (1.31.1-r9 -> 1.31.1-r10)
+Executing busybox-1.31.1-r10.post-upgrade
+(9/101) Upgrading ca-certificates-cacert (20191127-r0 -> 20191127-r2)
+(10/101) Upgrading ssl_client (1.31.1-r9 -> 1.31.1-r10)
+(11/101) Installing fakeroot (1.24-r0)
+(12/101) Installing sudo (1.9.5p2-r1)
+(13/101) Installing libcap (2.27-r0)
+(14/101) Installing pax-utils (1.2.4-r0)
+(15/101) Installing openssl (1.1.1k-r0)
+(16/101) Upgrading apk-tools (2.10.4-r3 -> 2.10.6-r0)
+(17/101) Upgrading musl-utils (1.1.24-r0 -> 1.1.24-r3)
+(18/101) Installing libattr (2.4.48-r0)
+(19/101) Installing attr (2.4.48-r0)
+(20/101) Installing libacl (2.2.53-r0)
+(21/101) Installing tar (1.32-r2)
+(22/101) Installing pkgconf (1.6.3-r0)
+(23/101) Installing patch (2.7.6-r6)
+(24/101) Installing libgcc (9.3.0-r0)
+(25/101) Installing libstdc++ (9.3.0-r0)
+(26/101) Installing lzip (1.21-r0)
+(27/101) Upgrading ca-certificates (20191127-r0 -> 20191127-r2)
+(28/101) Installing nghttp2-libs (1.40.0-r1)
+(29/101) Installing libcurl (7.67.0-r4)
+(30/101) Installing curl (7.67.0-r4)
+(31/101) Installing abuild (3.5.0-r1)
+Executing abuild-3.5.0-r1.pre-install
+(32/101) Installing binutils (2.33.1-r1)
+(33/101) Installing libmagic (5.37-r1)
+(34/101) Installing file (5.37-r1)
+(35/101) Installing gmp (6.1.2-r1)
+(36/101) Installing isl (0.18-r0)
+(37/101) Installing libgomp (9.3.0-r0)
+(38/101) Installing libatomic (9.3.0-r0)
+(39/101) Installing mpfr4 (4.0.2-r1)
+(40/101) Installing mpc1 (1.1.0-r1)
+(41/101) Installing gcc (9.3.0-r0)
+(42/101) Installing musl-dev (1.1.24-r3)
+(43/101) Installing libc-dev (0.7.2-r0)
+(44/101) Installing g++ (9.3.0-r0)
+(45/101) Installing make (4.2.1-r2)
+(46/101) Installing fortify-headers (1.1-r0)
+(47/101) Installing build-base (0.5-r1)
+(48/101) Installing pcre2 (10.34-r1)
+(49/101) Installing git (2.24.4-r0)
+(50/101) Installing alpine-sdk (1.0-r0)
+(51/101) Installing bash (5.0.11-r1)
+Executing bash-5.0.11-r1.post-install
+(52/101) Installing libpng (1.6.37-r1)
+(53/101) Installing freetype (2.10.1-r1)
+(54/101) Installing zlib-dev (1.2.11-r3)
+(55/101) Installing libpng-dev (1.6.37-r1)
+(56/101) Installing freetype-dev (2.10.1-r1)
+(57/101) Installing htop (2.2.0-r0)
+(58/101) Installing libquadmath (9.3.0-r0)
+(59/101) Installing libgfortran (9.3.0-r0)
+(60/101) Installing blas (3.9.0-r1)
+(61/101) Installing lapack (3.9.0-r1)
+(62/101) Installing lapack-dev (3.9.0-r1)
+(63/101) Installing less (551-r0)
+(64/101) Installing libexecinfo (1.1-r1)
+(65/101) Installing libexecinfo-dev (1.1-r1)
+(66/101) Installing db (5.3.28-r1)
+(67/101) Installing libsasl (2.1.27-r5)
+(68/101) Installing libldap (2.4.48-r3)
+(69/101) Installing libpq (12.7-r0)
+(70/101) Installing gfortran (9.3.0-r0)
+(71/101) Installing openblas-ilp64 (0.3.7-r3)
+(72/101) Installing openblas (0.3.7-r3)
+(73/101) Installing openblas-dev (0.3.7-r3)
+(74/101) Installing openssh-keygen (8.1_p1-r0)
+(75/101) Installing libedit (20191211.3.1-r0)
+(76/101) Installing openssh-client (8.1_p1-r0)
+(77/101) Installing openssh-sftp-server (8.1_p1-r0)
+(78/101) Installing openssh-server-common (8.1_p1-r0)
+(79/101) Installing openssh-server (8.1_p1-r0)
+(80/101) Installing openssh (8.1_p1-r0)
+(81/101) Installing postgresql-client (12.7-r0)
+(82/101) Installing tzdata (2021a-r0)
+(83/101) Installing libxml2 (2.9.10-r5)
+(84/101) Installing postgresql (12.7-r0)
+Executing postgresql-12.7-r0.pre-install
+(85/101) Installing openssl-dev (1.1.1k-r0)
+(86/101) Installing postgresql-libs (12.7-r0)
+(87/101) Installing postgresql-dev (12.7-r0)
+(88/101) Installing proj-datumgrid (6.2.1-r0)
+(89/101) Installing proj (6.2.1-r0)
+(90/101) Installing proj-dev (6.2.1-r0)
+(91/101) Installing proj-util (6.2.1-r0)
+(92/101) Installing python3 (3.8.10-r0)
+(93/101) Installing python3-dev (3.8.10-r0)
+(94/101) Installing popt (1.16-r7)
+(95/101) Installing rsync (3.1.3-r2)
+(96/101) Installing mailcap (2.1.48-r0)
+(97/101) Installing jansson (2.12-r0)
+(98/101) Installing pcre (8.43-r1)
+(99/101) Installing uwsgi (2.0.18-r7)
+Executing uwsgi-2.0.18-r7.pre-install
+(100/101) Installing uwsgi-python3 (2.0.18-r7)
+(101/101) Installing wget (1.20.3-r0)
+Executing busybox-1.31.1-r10.trigger
+Executing ca-certificates-20191127-r2.trigger
+OK: 464 MiB in 122 packages
+Collecting pip
+  Downloading pip-21.1.2-py3-none-any.whl (1.5 MB)
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 20.0.2
+    Uninstalling pip-20.0.2:
+      Successfully uninstalled pip-20.0.2
+Successfully installed pip-21.1.2
+Collecting numpy==1.20.2
+  Downloading numpy-1.20.2.zip (7.8 MB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+    Preparing wheel metadata: started
+    Preparing wheel metadata: finished with status 'done'
+Collecting scipy==1.3.1
+  Downloading scipy-1.3.1.tar.gz (23.6 MB)
+  Installing build dependencies: started
+  Installing build dependencies: still running...
+  Installing build dependencies: still running...
+  Installing build dependencies: still running...
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+    Preparing wheel metadata: started
+    Preparing wheel metadata: finished with status 'done'
+Collecting cython==0.29.21
+  Downloading Cython-0.29.21-py2.py3-none-any.whl (974 kB)
+Collecting pandas==1.0.5
+  Downloading pandas-1.0.5.tar.gz (5.0 MB)
+  Installing build dependencies: started
+  Installing build dependencies: still running...
+  Installing build dependencies: still running...
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: still running...
+  Getting requirements to build wheel: finished with status 'done'
+    Preparing wheel metadata: started
+    Preparing wheel metadata: finished with status 'done'
+Collecting sqlalchemy==1.3.18
+  Downloading SQLAlchemy-1.3.18.tar.gz (6.0 MB)
+Collecting paho-mqtt==1.5.0
+  Downloading paho-mqtt-1.5.0.tar.gz (99 kB)
+Collecting psycopg2==2.8.5
+  Downloading psycopg2-2.8.5.tar.gz (380 kB)
+Collecting six==1.15.0
+  Downloading six-1.15.0-py2.py3-none-any.whl (10 kB)
+Collecting requests==2.24.0
+  Downloading requests-2.24.0-py2.py3-none-any.whl (61 kB)
+Collecting pyproj==2.6.1
+  Downloading pyproj-2.6.1.tar.gz (528 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+    Preparing wheel metadata: started
+    Preparing wheel metadata: finished with status 'done'
+Collecting statistics==1.0.3.5
+  Downloading statistics-1.0.3.5.tar.gz (8.3 kB)
+Collecting matplotlib==3.2.2
+  Downloading matplotlib-3.2.2.tar.gz (40.3 MB)
+Collecting pykalman
+  Downloading pykalman-0.9.5.tar.gz (228 kB)
+Collecting python-dateutil>=2.6.1
+  Downloading python_dateutil-2.8.1-py2.py3-none-any.whl (227 kB)
+Collecting pytz>=2017.2
+  Downloading pytz-2021.1-py2.py3-none-any.whl (510 kB)
+Collecting chardet<4,>=3.0.2
+  Downloading chardet-3.0.4-py2.py3-none-any.whl (133 kB)
+Collecting idna<3,>=2.5
+  Downloading idna-2.10-py2.py3-none-any.whl (58 kB)
+Collecting certifi>=2017.4.17
+  Downloading certifi-2021.5.30-py2.py3-none-any.whl (145 kB)
+Collecting urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1
+  Downloading urllib3-1.25.11-py2.py3-none-any.whl (127 kB)
+Collecting docutils>=0.3
+  Downloading docutils-0.17.1-py2.py3-none-any.whl (575 kB)
+Collecting cycler>=0.10
+  Downloading cycler-0.10.0-py2.py3-none-any.whl (6.5 kB)
+Collecting kiwisolver>=1.0.1
+  Downloading kiwisolver-1.3.1.tar.gz (53 kB)
+Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
+  Downloading pyparsing-2.4.7-py2.py3-none-any.whl (67 kB)
+Building wheels for collected packages: numpy, scipy, pandas, sqlalchemy, paho-mqtt, psycopg2, pyproj, statistics, matplotlib, kiwisolver, pykalman
+  Building wheel for numpy (PEP 517): started
+  Building wheel for numpy (PEP 517): still running...
+  Building wheel for numpy (PEP 517): still running...
+  Building wheel for numpy (PEP 517): still running...
+  Building wheel for numpy (PEP 517): finished with status 'done'
+  Created wheel for numpy: filename=numpy-1.20.2-cp38-cp38-linux_x86_64.whl size=17280680 sha256=72fa418d71e103f1979359ec867e30c538d3f3c8bb14c71ab67faff85a626d89
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/e6/85/96/b353a55f333c41eb906284e4b5ff81fe65a5512edee8270e8c
+  Building wheel for scipy (PEP 517): started
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): still running...
+  Building wheel for scipy (PEP 517): finished with status 'done'
+  Created wheel for scipy: filename=scipy-1.3.1-cp38-cp38-linux_x86_64.whl size=57553797 sha256=014b4bb916e8e409f53befefd3ecae68d172792cf91391f1ee6f05025cb8311e
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/2d/a3/0b/e0bf8cf6527c9cd7d79d4f974a88adc8fa038b1c896ed6d046
+  Building wheel for pandas (PEP 517): started
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): finished with status 'done'
+  Created wheel for pandas: filename=pandas-1.0.5-cp38-cp38-linux_x86_64.whl size=42964835 sha256=cdab5dfc40248bce4f79cbb60e62ec9f42792852693aabf5fe895d4d2f02a4d3
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/45/e9/f0/382169ee6a52a0e250be20c6a4d8e3bd15c56477f3fdcfcdf4
+  Building wheel for sqlalchemy (setup.py): started
+  Building wheel for sqlalchemy (setup.py): finished with status 'done'
+  Created wheel for sqlalchemy: filename=SQLAlchemy-1.3.18-cp38-cp38-linux_x86_64.whl size=1251441 sha256=31b2d5fbad62f3257e6446a2f3db85ded03a9130dd481b2c74fd34ca2637b794
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/c7/a6/82/6ace7909dbc5a08dcb4f4634ea80e2d0818dbbace2b2639b74
+  Building wheel for paho-mqtt (setup.py): started
+  Building wheel for paho-mqtt (setup.py): finished with status 'done'
+  Created wheel for paho-mqtt: filename=paho_mqtt-1.5.0-py3-none-any.whl size=61415 sha256=d7e43afe3292cc83cdf723beb7f5459d68070b06b5204067fe01a07dcad0d859
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/c6/63/e1/6e3a42c72eb48428f83a5718662fc2273b0ffe7f644085cc4e
+  Building wheel for psycopg2 (setup.py): started
+  Building wheel for psycopg2 (setup.py): finished with status 'done'
+  Created wheel for psycopg2: filename=psycopg2-2.8.5-cp38-cp38-linux_x86_64.whl size=507606 sha256=04777b9f8f083fa80f3e4ebf96a889b3bfd4fd9b3ef44dea0e92c60b2fc1b906
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/35/64/21/9c9e2c1bb9cd6bca3c1b97b955615e37fd309f8e8b0b9fdf1a
+  Building wheel for pyproj (PEP 517): started
+  Building wheel for pyproj (PEP 517): finished with status 'done'
+  Created wheel for pyproj: filename=pyproj-2.6.1-cp38-cp38-linux_x86_64.whl size=2050427 sha256=e354d84abf06b9401a3bab3dc5f89a3094f160d4159c25ba5a0e72ed48c5dc6c
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/8b/87/09/d21447313ca2a48048ecd5548a2f9d3345e0bb04a938ada0ae
+  Building wheel for statistics (setup.py): started
+  Building wheel for statistics (setup.py): finished with status 'done'
+  Created wheel for statistics: filename=statistics-1.0.3.5-py3-none-any.whl size=7451 sha256=b9cf3bafacbe468e9ebb1b90a7a138ad2693420384468509b216d43691b09c12
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/36/4b/c7/6af97584669b756c0d60c5ff05d5fb1f533a4e4d96e5ee92b9
+  Building wheel for matplotlib (setup.py): started
+  Building wheel for matplotlib (setup.py): still running...
+  Building wheel for matplotlib (setup.py): finished with status 'done'
+  Created wheel for matplotlib: filename=matplotlib-3.2.2-cp38-cp38-linux_x86_64.whl size=12427820 sha256=4451590def0fee9b162cfaa7e447a45bb5a1ed2a372db35ae643b4696ac4ff4e
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/47/1b/58/4a971ec81858b6a8f9c9db74512d662d0950bdaa4f9a3ea797
+  Building wheel for kiwisolver (setup.py): started
+  Building wheel for kiwisolver (setup.py): finished with status 'done'
+  Created wheel for kiwisolver: filename=kiwisolver-1.3.1-cp38-cp38-linux_x86_64.whl size=1287630 sha256=3f4b9dfb6cd9d10537ee1ee106de154cebbe44a57ab04e1873344b2801ac1471
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/49/7a/59/6f2c773cd1ce6e92e1bfbccc3bec04070f45aa770097e83f6b
+  Building wheel for pykalman (setup.py): started
+  Building wheel for pykalman (setup.py): finished with status 'done'
+  Created wheel for pykalman: filename=pykalman-0.9.5-py3-none-any.whl size=48462 sha256=a67e608c0d8334f7006a1d9453cea6867bc8f0402a3596c6ddc05f05ffbe2bd9
+  Stored in directory: /tmp/pip-ephem-wheel-cache-uysr60g5/wheels/11/16/21/615e29f0001ed6258b25d2a3a84ccfd65c5469b3505d4ab3ab
+Successfully built numpy scipy pandas sqlalchemy paho-mqtt psycopg2 pyproj statistics matplotlib kiwisolver pykalman
+Installing collected packages: six, urllib3, pytz, python-dateutil, pyparsing, numpy, kiwisolver, idna, docutils, cycler, chardet, certifi, statistics, sqlalchemy, scipy, requests, pyproj, pykalman, psycopg2, pandas, paho-mqtt, matplotlib, cython
+WARNING: Running pip as root will break packages and permissions. You should install packages reliably by using venv: https://pip.pypa.io/warnings/venv
+Successfully installed certifi-2021.5.30 chardet-3.0.4 cycler-0.10.0 cython-0.29.21 docutils-0.17.1 idna-2.10 kiwisolver-1.3.1 matplotlib-3.2.2 numpy-1.20.2 paho-mqtt-1.5.0 pandas-1.0.5 psycopg2-2.8.5 pykalman-0.9.5 pyparsing-2.4.7 pyproj-2.6.1 python-dateutil-2.8.1 pytz-2021.1 requests-2.24.0 scipy-1.3.1 six-1.15.0 sqlalchemy-1.3.18 statistics-1.0.3.5 urllib3-1.25.11
+Removing intermediate container 3ee0497b9362
+ ---> 7bc17e3792bc
+Step 9/9 : CMD ["top"]
+ ---> Running in 57c59a18e9b5
+Removing intermediate container 57c59a18e9b5
+ ---> e689a92965bd
+Successfully built e689a92965bd
+Successfully tagged grs-docker:latest
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/geolocation$
+
+###################################### 08.06.21 (inserted a makefile and tried building the image, then caused this wheels error) ##############################################
+
+                   from scipy/sparse/sparsetools/bsr.cxx:4:
+  /tmp/pip-build-env-1p7xftfz/overlay/lib/python3.8/site-packages/numpy/core/include/numpy/npy_1_7_deprecated_api.h:15:2: warning: #warning "Using deprecated NumPy API, disable it by " "#defining NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+     15 | #warning "Using deprecated NumPy API, disable it by " \
+        |  ^~~~~~~
+  g++: fatal error: Killed signal terminated program as
+  compilation terminated.
+  In file included from /tmp/pip-build-env-1p7xftfz/overlay/lib/python3.8/site-packages/numpy/core/include/numpy/ndarraytypes.h:1816,
+                   from /tmp/pip-build-env-1p7xftfz/overlay/lib/python3.8/site-packages/numpy/core/include/numpy/ndarrayobject.h:18,
+                   from scipy/sparse/sparsetools/sparsetools.h:5,
+                   from scipy/sparse/sparsetools/bsr.cxx:4:
+  /tmp/pip-build-env-1p7xftfz/overlay/lib/python3.8/site-packages/numpy/core/include/numpy/npy_1_7_deprecated_api.h:15:2: warning: #warning "Using deprecated NumPy API, disable it by " "#defining NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+     15 | #warning "Using deprecated NumPy API, disable it by " \
+        |  ^~~~~~~
+  g++: fatal error: Killed signal terminated program as
+  compilation terminated.
+  error: Command "g++ -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -DTHREAD_STACK_SIZE=0x100000 -fPIC -D__STDC_FORMAT_MACROS=1 -Iscipy/sparse/sparsetools -I/tmp/pip-build-env-1p7xftfz/overlay/lib/python3.8/site-packages/numpy/core/include -I/usr/local/include/python3.8 -c scipy/sparse/sparsetools/bsr.cxx -o build/temp.linux-x86_64-3.8/scipy/sparse/sparsetools/bsr.o -MMD -MF build/temp.linux-x86_64-3.8/scipy/sparse/sparsetools/bsr.o.d" failed with exit status 1
+  ----------------------------------------
+  ERROR: Failed building wheel for scipy
+  Building wheel for pandas (PEP 517): started
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+  Building wheel for pandas (PEP 517): still running...
+^Cmake: *** [Makefile:2: build] Interrupt
+thangaraj@KOM1260:~/.ssh$ cd /mnt/c/Users/thangaraj/grs-docker
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/grs-docker$ cat makefile
+build:
+        cd geolocation && docker build -t komrogrs .
+
+compose: build
+        docker-compose up
+
+stop:
+        docker-compose down
+
+update:
+        /bin/bash copy2container.sh 
+################################################################################# versuch 2 (ohne Makefile) ##########################################
+thangaraj@KOM1260:/mnt/c/Users/thangaraj/grs-docker$
+  Stored in directory: /tmp/pip-ephem-wheel-cache-gbkb14qa/wheels/11/16/21/615e29f0001ed6258b25d2a3a84ccfd65c5469b3505d4ab3ab
+Successfully built numpy pandas sqlalchemy paho-mqtt psycopg2 pyproj statistics matplotlib kiwisolver pykalman
+Failed to build scipy
+ERROR: Could not build wheels for scipy which use PEP 517 and cannot be installed directly
+The command '/bin/sh -c apk update     && apk add --upgrade --no-cache      python3 libpq uwsgi-python3
+     python3-dev py3-pip alpine-sdk postgresql-dev postgresql           proj proj-dev           proj-util         bash openssh curl ca-certificates openssl less htop             g++ make wget rsync         build-base libpng-dev freetype-dev libexecinfo-dev openblas-dev libgomp lapack-dev            libgcc libquadmath musl                 libgfortran               lapack-dev      &&  pip install --no-cache-dir --upgrade pip     &&  pip install --no-cache-dir -r requirements.txt' returned a non-zero code: 1
+	 
+	 
+	 126 thangaraj@docker-thangaraj ~ % docker exec -it 3926309f33c9 /bin/sh
+/app # ls
+Calculate_A_n_RSSI_online.py    create_db_table.py              query_best_results.py
+Docker README.txt               datasets                        readme.txt
+Dockerfile                      docker-compose.yml              requirements.txt
+KOMRO_GRS_in_Docker.pptx        docker_console_logs_210526.txt  resolver.py
+__pycache__                     evaluate_kom.py                 subscriber_db.py
+/app # cd datasets
+/app/datasets # ls
+TrueLocations.csv              TrueLocations_bad_device.csv   TrueLocations_old.csv
+TrueLocations_1.csv            TrueLocations_good_device.csv
+/app/datasets # ls -a
+.                              TrueLocations_1.csv            TrueLocations_old.csv
+..                             TrueLocations_bad_device.csv
+TrueLocations.csv              TrueLocations_good_device.csv
+/app/datasets # ls -la
+total 28
+drwxrwxrwx    2 appuser  appuser       4096 May 20 13:39 .
+drwxr-sr-x    1 appuser  appuser       4096 Jun  7 13:56 ..
+-rwxrwxrwx    1 appuser  appuser       4072 May 11 10:49 TrueLocations.csv
+-rwxrwxrwx    1 appuser  appuser        987 May  4 12:54 TrueLocations_1.csv
+-rwxrwxrwx    1 appuser  appuser       1176 May  4 12:54 TrueLocations_bad_device.csv
+-rwxrwxrwx    1 appuser  appuser        578 May  4 12:54 TrueLocations_good_device.csv
+-rwxrwxrwx    1 appuser  appuser       1797 May  4 12:54 TrueLocations_old.csv
+/app/datasets # cd .-.
+/bin/sh: cd: can't cd to .-.: No such file or directory
+/app/datasets # cd ..
+/app # ls -la
+total 692
+drwxr-sr-x    1 appuser  appuser       4096 Jun  7 13:56 .
+drwxr-xr-x    1 root     root          4096 Jun  7 16:08 ..
+drwxrwxrwx    7 appuser  appuser       4096 Jun  7 13:50 .git
+drwxrwxrwx    3 appuser  appuser       4096 Jun  2 11:46 .idea
+-rwxrwxrwx    1 appuser  appuser       9298 May 27 13:22 Calculate_A_n_RSSI_online.py
+-rwxrwxrwx    1 appuser  appuser       1519 May  4 12:54 Docker README.txt
+-rwxrwxrwx    1 appuser  appuser        772 May 27 09:44 Dockerfile
+-rwxrwxrwx    1 appuser  appuser     430285 May  4 12:54 KOMRO_GRS_in_Docker.pptx
+drwxrwxrwx    2 appuser  appuser       4096 May 20 13:39 __pycache__
+-rwxrwxrwx    1 appuser  appuser       6427 May 31 15:06 create_db_table.py
+drwxrwxrwx    2 appuser  appuser       4096 May 20 13:39 datasets
+-rwxrwxrwx    1 appuser  appuser        893 May 31 14:49 docker-compose.yml
+-rwxrwxrwx    1 appuser  appuser      91810 May 31 08:40 docker_console_logs_210526.txt
+-rwxrwxrwx    1 appuser  appuser      14948 Jun  4 10:08 evaluate_kom.py
+-rwxrwxrwx    1 appuser  appuser      23333 Jun  2 15:58 query_best_results.py
+-rwxrwxrwx    1 appuser  appuser       5246 May 20 13:30 readme.txt
+-rwxrwxrwx    1 appuser  appuser        222 May 18 20:14 requirements.txt
+-rwxrwxrwx    1 appuser  appuser      57235 May 31 15:07 resolver.py
+-rwxrwxrwx    1 appuser  appuser      10975 May 31 15:06 subscriber_db.py
+/app # ls -la
+total 692
+drwxr-sr-x    1 appuser  appuser       4096 Jun  7 13:56 .
+drwxr-xr-x    1 root     root          4096 Jun  8 13:17 ..
+drwxrwxrwx    7 appuser  appuser       4096 Jun  7 13:50 .git
+drwxrwxrwx    3 appuser  appuser       4096 Jun  2 11:46 .idea
+-rwxrwxrwx    1 appuser  appuser       9298 May 27 13:22 Calculate_A_n_RSSI_online.py
+-rwxrwxrwx    1 appuser  appuser       1519 May  4 12:54 Docker README.txt
+-rwxrwxrwx    1 appuser  appuser        772 May 27 09:44 Dockerfile
+-rwxrwxrwx    1 appuser  appuser     430285 May  4 12:54 KOMRO_GRS_in_Docker.pptx
+drwxrwxrwx    2 appuser  appuser       4096 May 20 13:39 __pycache__
+-rwxrwxrwx    1 appuser  appuser       6427 May 31 15:06 create_db_table.py
+drwxrwxrwx    2 appuser  appuser       4096 May 20 13:39 datasets
+-rwxrwxrwx    1 appuser  appuser        893 May 31 14:49 docker-compose.yml
+-rwxrwxrwx    1 appuser  appuser      91810 May 31 08:40 docker_console_logs_210526.txt
+-rwxrwxrwx    1 appuser  appuser      14948 Jun  4 10:08 evaluate_kom.py
+-rwxrwxrwx    1 appuser  appuser      23333 Jun  2 15:58 query_best_results.py
+-rwxrwxrwx    1 appuser  appuser       5246 May 20 13:30 readme.txt
+-rwxrwxrwx    1 appuser  appuser        222 May 18 20:14 requirements.txt
+-rwxrwxrwx    1 appuser  appuser      57235 May 31 15:07 resolver.py
+-rwxrwxrwx    1 appuser  appuser      10975 May 31 15:06 subscriber_db.py
+/app # ls -la
+total 696
+drwxr-sr-x    1 appuser  appuser       4096 Jun  8 13:18 .
+drwxr-xr-x    1 root     root          4096 Jun  8 13:18 ..
+drwxrwxrwx    7 appuser  appuser       4096 Jun  7 13:50 .git
+drwxrwxrwx    3 appuser  appuser       4096 Jun  2 11:46 .idea
+-rwxrwxrwx    1 appuser  appuser       9298 May 27 13:22 Calculate_A_n_RSSI_online.py
+-rwxrwxrwx    1 appuser  appuser       1519 May  4 12:54 Docker README.txt
+-rwxrwxrwx    1 appuser  appuser        772 May 27 09:44 Dockerfile
+-rwxrwxrwx    1 appuser  appuser     430285 May  4 12:54 KOMRO_GRS_in_Docker.pptx
+-rwxrwxrwx    1 1000     1000           189 Jun  7 14:53 README.md
+drwxrwxrwx    2 appuser  appuser       4096 May 20 13:39 __pycache__
+-rwxrwxrwx    1 appuser  appuser       6427 May 31 15:06 create_db_table.py
+drwxrwxrwx    2 appuser  appuser       4096 May 20 13:39 datasets
+-rwxrwxrwx    1 appuser  appuser        893 May 31 14:49 docker-compose.yml
+-rwxrwxrwx    1 appuser  appuser      91810 May 31 08:40 docker_console_logs_210526.txt
+-rwxrwxrwx    1 appuser  appuser      14948 Jun  4 10:08 evaluate_kom.py
+-rwxrwxrwx    1 appuser  appuser      23333 Jun  2 15:58 query_best_results.py
+-rwxrwxrwx    1 appuser  appuser       5246 May 20 13:30 readme.txt
+-rwxrwxrwx    1 appuser  appuser        222 May 18 20:14 requirements.txt
+-rwxrwxrwx    1 appuser  appuser      57235 May 31 15:07 resolver.py
+-rwxrwxrwx    1 appuser  appuser      10975 May 31 15:06 subscriber_db.py
+/app #
+
+#################### Remove all docker files ##################################
+thangaraj@KOM1260:/$ docker image ls
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+thangaraj@KOM1260:/$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+thangaraj@KOM1260:/$ docker system prune
+WARNING! This will remove:
+  - all stopped containers
+  - all networks not used by at least one container
+  - all dangling images
+  - all dangling build cache
+
+Are you sure you want to continue? [y/N] y
+Total reclaimed space: 0B
+thangaraj@KOM1260:/$

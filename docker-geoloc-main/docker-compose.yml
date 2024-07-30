@@ -1,0 +1,38 @@
+version: '3'
+services:
+  db:
+    image: postgres:11-alpine
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: PW556655
+        POSTGRES_DB: Geolocation_DB
+    ports:
+        - "0.0.0.0:5432:5432"
+    restart: always
+  grs_subscriber:
+    image: komrogrs:latest
+    command: >
+      sh -c "python3 create_db_table.py &&
+             python3 subscriber_db.py"
+    environment:
+        POSTGRES_PASSWORD: PW556655
+        POSTGRES_DB: Geolocation_DB
+        POSTGRES_USER: postgres
+    restart: always
+    depends_on:
+      - db
+  grs_resolver:
+    image: komrogrs:latest
+    command: >
+      sh -c "python3 resolver.py"
+    environment:
+        POSTGRES_PASSWORD: PW556655
+        POSTGRES_DB: Geolocation_DB
+        POSTGRES_USER: postgres
+    restart: always
+    depends_on:
+      - db
+volumes:
+  data:
