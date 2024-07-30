@@ -8,7 +8,7 @@ This script should run on the docker server for every minute/always in order to 
 into the PostgreSQL DB
 
 Points to Remember:
-1. Check & Change the PostgreSQL params (host: 'db' & password: 'PW556655' )
+1. Check & Change the PostgreSQL params (host: 'db' & password: 'Admin1234' )
 2. Check the Broker params (host: 10.2.0.7:1884)
 3. SQLAlchemy url Syntax: dialect+driver://username:password@host:port/database
 """
@@ -22,7 +22,7 @@ from sqlalchemy import create_engine
 DB_NAME= 'Geolocation_DB'
 postgres_host= 'db'
 postgres_port= '5432'
-postgres_password= 'PW556655'
+postgres_password= 'Admin1234'
 #mqtt params
 geoloc_host = '10.2.0.7'
 mqtt_port = 1884
