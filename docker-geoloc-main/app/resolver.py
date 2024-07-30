@@ -6,7 +6,7 @@ Created on Thu Jun  25 09:13:39 2020
 
 # User inputs are:
 postgres_host      -    hostname/IP of the postgres database server (zB. localhost/db)
-postgres_password  -    password of the postgres database server (zB. postgres/PW556655)
+postgres_password  -    password of the postgres database server (zB. postgres/Admin1234)
 DB_NAME            -    Database name at which the tables geoloc_packets, geoloc_results were created (zB. Geolocation_DB)
 dev_addr           -    optional, device address assigned by network server (zB. [0167f446, 0167f447...])
                         otherwise should check & change everytime ín the resolver.py!
